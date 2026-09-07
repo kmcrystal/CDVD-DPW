@@ -25,8 +25,6 @@ The [`code/`](./code/) directory contains the complete implementation of the CDV
 
 Detailed installation, execution, and implementation-to-paper mappings are provided inside the code directory.
 
-[Open the implementation](./code/)
-
 ## Dataset
 
 The [`dataset/`](./dataset/) directory documents the datasets used for the cross-CWE and cross-project experiments, including their construction and provenance.
@@ -37,9 +35,7 @@ The complete evaluation datasets are permanently archived on Zenodo:
 
 The Zenodo archive contains the released dataset package together with its provenance, evidence, and manifest information.
 
-[Open the dataset documentation](./dataset/)
-
-## Supplementary Evidence
+## Suppleentary Evidence
 
 The [`supplementary/`](./supplementary/) directory contains additional evidence explicitly referenced in the paper.
 
@@ -51,8 +47,6 @@ In particular, the RQ2 case audit supplements the representative cross-project c
 - false-negative (FN) cases.
 
 The case materials provide the corresponding target contexts and weighted source evidence used in the qualitative analysis.
-
-[Open the supplementary materials](./supplementary/)
 
 ## Artifact Organization
 
