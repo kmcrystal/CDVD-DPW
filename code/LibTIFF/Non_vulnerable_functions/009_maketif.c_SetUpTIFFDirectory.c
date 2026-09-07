@@ -1,0 +1,17 @@
+void SetUpTIFFDirectory(TIFF *tif)
+{
+	double mymulti[6]={0.0,1.0,2.0,  3.1415926, 5.0,1.0};
+	uint32 mysingle=3456;
+	char *ascii="This file was produced by Steven Spielberg. NOT";
+	TIFFSetField(tif,TIFFTAG_IMAGEWIDTH,WIDTH);
+	TIFFSetField(tif,TIFFTAG_IMAGELENGTH,HEIGHT);
+	TIFFSetField(tif,TIFFTAG_COMPRESSION,COMPRESSION_NONE);
+	TIFFSetField(tif,TIFFTAG_PHOTOMETRIC,PHOTOMETRIC_MINISBLACK);
+	TIFFSetField(tif,TIFFTAG_PLANARCONFIG,PLANARCONFIG_CONTIG);
+	TIFFSetField(tif,TIFFTAG_BITSPERSAMPLE,8);
+	TIFFSetField(tif,TIFFTAG_ROWSPERSTRIP,20);
+	
+	TIFFSetField(tif,TIFFTAG_EXAMPLE_MULTI,6,mymulti);
+	TIFFSetField(tif,TIFFTAG_EXAMPLE_SINGLE,mysingle);
+	TIFFSetField(tif,TIFFTAG_EXAMPLE_ASCII,ascii);
+}

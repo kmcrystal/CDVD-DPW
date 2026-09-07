@@ -1,0 +1,574 @@
+71 cve-2004-0599-1.c AE 72 18
+void
+png_handle_sPLT(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
+png_uint_32 skip = 0;
+if (!(png_ptr->mode & PNG_HAVE_IHDR))
+png_error(png_ptr, "Missing IHDR before sPLT");
+else if (png_ptr->mode & PNG_HAVE_IDAT)
+chunkdata = (png_bytep)png_malloc(png_ptr, length + 1);
+slength = (png_size_t)length;
+png_crc_read(png_ptr, (png_bytep)chunkdata, slength);
+if (png_crc_finish(png_ptr, skip))
+chunkdata[slength] = 0x00;
+for (entry_start = chunkdata; *entry_start; entry_start++)
+++entry_start;
+if (entry_start > chunkdata + slength - 2)
+new_palette.depth = *entry_start++;
+entry_size = (new_palette.depth == 8 ? 6 : 10);
+data_length = (slength - (entry_start - chunkdata));
+if (data_length % entry_size)
+new_palette.nentries = (png_int_32) ( data_length / entry_size);
+if ((png_uint_32) new_palette.nentries > (png_uint_32) (PNG_SIZE_MAX /
+png_warning(png_ptr, "sPLT chunk too long");
+return;
+new_palette.entries = (png_sPLT_entryp)png_malloc_warn(
+png_ptr, new_palette.nentries * png_sizeof(png_sPLT_entry));
+if (new_palette.entries == NULL)
+png_warning(png_ptr, "sPLT chunk requires too much memory");
+return;
+for (i = 0; i < new_palette.nentries; i++)
+png_sPLT_entryp pp = new_palette.entries + i;
+if (new_palette.depth == 8)
+pp->red = *entry_start++;
+pp->green = *entry_start++;
+pp->blue = *entry_start++;
+pp->alpha = *entry_start++;
+pp->red   = png_get_uint_16(entry_start); entry_start += 2;
+pp->green = png_get_uint_16(entry_start); entry_start += 2;
+pp->blue  = png_get_uint_16(entry_start); entry_start += 2;
+pp->alpha = png_get_uint_16(entry_start); entry_start += 2;
+pp->frequency = png_get_uint_16(entry_start); entry_start += 2;
+new_palette.name = (png_charp)chunkdata;
+png_set_sPLT(png_ptr, info_ptr, &new_palette, 1);
+png_free(png_ptr, chunkdata);
+png_free(png_ptr, new_palette.entries);
+1
+---------------------------------
+148 cve-2004-0599-1.c AE 80 22
+void
+png_handle_sPLT(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
+png_uint_32 skip = 0;
+if (!(png_ptr->mode & PNG_HAVE_IHDR))
+png_error(png_ptr, "Missing IHDR before sPLT");
+else if (png_ptr->mode & PNG_HAVE_IDAT)
+chunkdata = (png_bytep)png_malloc(png_ptr, length + 1);
+slength = (png_size_t)length;
+png_crc_read(png_ptr, (png_bytep)chunkdata, slength);
+if (png_crc_finish(png_ptr, skip))
+chunkdata[slength] = 0x00;
+for (entry_start = chunkdata; *entry_start; entry_start++)
+++entry_start;
+if (entry_start > chunkdata + slength - 2)
+new_palette.depth = *entry_start++;
+entry_size = (new_palette.depth == 8 ? 6 : 10);
+data_length = (slength - (entry_start - chunkdata));
+if (data_length % entry_size)
+new_palette.nentries = (png_int_32) ( data_length / entry_size);
+if ((png_uint_32) new_palette.nentries > (png_uint_32) (PNG_SIZE_MAX /
+png_sizeof(png_sPLT_entry)))
+new_palette.entries = (png_sPLT_entryp)png_malloc_warn(
+png_ptr, new_palette.nentries * png_sizeof(png_sPLT_entry));
+if (new_palette.entries == NULL)
+png_warning(png_ptr, "sPLT chunk requires too much memory");
+return;
+for (i = 0; i < new_palette.nentries; i++)
+png_sPLT_entryp pp = new_palette.entries + i;
+if (new_palette.depth == 8)
+pp->red = *entry_start++;
+pp->green = *entry_start++;
+pp->blue = *entry_start++;
+pp->alpha = *entry_start++;
+pp->red   = png_get_uint_16(entry_start); entry_start += 2;
+pp->green = png_get_uint_16(entry_start); entry_start += 2;
+pp->blue  = png_get_uint_16(entry_start); entry_start += 2;
+pp->alpha = png_get_uint_16(entry_start); entry_start += 2;
+pp->frequency = png_get_uint_16(entry_start); entry_start += 2;
+new_palette.name = (png_charp)chunkdata;
+png_set_sPLT(png_ptr, info_ptr, &new_palette, 1);
+png_free(png_ptr, chunkdata);
+png_free(png_ptr, new_palette.entries);
+1
+---------------------------------
+326 cve-2004-0599-1.c AE 53 11
+void
+png_handle_sPLT(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
+png_uint_32 skip = 0;
+if (!(png_ptr->mode & PNG_HAVE_IHDR))
+png_error(png_ptr, "Missing IHDR before sPLT");
+else if (png_ptr->mode & PNG_HAVE_IDAT)
+chunkdata = (png_bytep)png_malloc(png_ptr, length + 1);
+slength = (png_size_t)length;
+png_crc_read(png_ptr, (png_bytep)chunkdata, slength);
+if (png_crc_finish(png_ptr, skip))
+chunkdata[slength] = 0x00;
+if (entry_start > chunkdata + slength - 2)
+png_free(png_ptr, chunkdata);
+png_warning(png_ptr, "malformed sPLT chunk");
+return;
+new_palette.depth = *entry_start++;
+entry_size = (new_palette.depth == 8 ? 6 : 10);
+data_length = (slength - (entry_start - chunkdata));
+if (data_length % entry_size)
+png_free(png_ptr, chunkdata);
+png_warning(png_ptr, "sPLT chunk has bad length");
+return;
+new_palette.nentries = (png_int_32) ( data_length / entry_size);
+if ((png_uint_32) new_palette.nentries > (png_uint_32) (PNG_SIZE_MAX /
+png_sizeof(png_sPLT_entry)))
+png_warning(png_ptr, "sPLT chunk too long");
+return;
+new_palette.entries = (png_sPLT_entryp)png_malloc_warn(
+png_ptr, new_palette.nentries * png_sizeof(png_sPLT_entry));
+if (new_palette.entries == NULL)
+png_warning(png_ptr, "sPLT chunk requires too much memory");
+return;
+for (i = 0; i < new_palette.nentries; i++)
+png_sPLT_entryp pp = new_palette.entries + i;
+if (new_palette.depth == 8)
+pp->red = *entry_start++;
+pp->green = *entry_start++;
+pp->blue = *entry_start++;
+pp->alpha = *entry_start++;
+pp->red   = png_get_uint_16(entry_start); entry_start += 2;
+pp->green = png_get_uint_16(entry_start); entry_start += 2;
+pp->blue  = png_get_uint_16(entry_start); entry_start += 2;
+pp->alpha = png_get_uint_16(entry_start); entry_start += 2;
+pp->frequency = png_get_uint_16(entry_start); entry_start += 2;
+new_palette.name = (png_charp)chunkdata;
+png_set_sPLT(png_ptr, info_ptr, &new_palette, 1);
+png_free(png_ptr, chunkdata);
+png_free(png_ptr, new_palette.entries);
+1
+---------------------------------
+516 cve-2004-0599-1.c AE 62 15
+void
+png_handle_sPLT(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
+png_uint_32 skip = 0;
+if (!(png_ptr->mode & PNG_HAVE_IHDR))
+png_error(png_ptr, "Missing IHDR before sPLT");
+else if (png_ptr->mode & PNG_HAVE_IDAT)
+chunkdata = (png_bytep)png_malloc(png_ptr, length + 1);
+slength = (png_size_t)length;
+png_crc_read(png_ptr, (png_bytep)chunkdata, slength);
+if (png_crc_finish(png_ptr, skip))
+chunkdata[slength] = 0x00;
+for (entry_start = chunkdata; *entry_start; entry_start++)
+++entry_start;
+if (entry_start > chunkdata + slength - 2)
+new_palette.depth = *entry_start++;
+data_length = (slength - (entry_start - chunkdata));
+if (data_length % entry_size)
+png_free(png_ptr, chunkdata);
+png_warning(png_ptr, "sPLT chunk has bad length");
+return;
+new_palette.nentries = (png_int_32) ( data_length / entry_size);
+if ((png_uint_32) new_palette.nentries > (png_uint_32) (PNG_SIZE_MAX /
+png_sizeof(png_sPLT_entry)))
+png_warning(png_ptr, "sPLT chunk too long");
+return;
+new_palette.entries = (png_sPLT_entryp)png_malloc_warn(
+png_ptr, new_palette.nentries * png_sizeof(png_sPLT_entry));
+if (new_palette.entries == NULL)
+png_warning(png_ptr, "sPLT chunk requires too much memory");
+return;
+for (i = 0; i < new_palette.nentries; i++)
+png_sPLT_entryp pp = new_palette.entries + i;
+if (new_palette.depth == 8)
+pp->red = *entry_start++;
+pp->green = *entry_start++;
+pp->blue = *entry_start++;
+pp->alpha = *entry_start++;
+pp->red   = png_get_uint_16(entry_start); entry_start += 2;
+pp->green = png_get_uint_16(entry_start); entry_start += 2;
+pp->blue  = png_get_uint_16(entry_start); entry_start += 2;
+pp->alpha = png_get_uint_16(entry_start); entry_start += 2;
+pp->frequency = png_get_uint_16(entry_start); entry_start += 2;
+new_palette.name = (png_charp)chunkdata;
+png_set_sPLT(png_ptr, info_ptr, &new_palette, 1);
+png_free(png_ptr, chunkdata);
+png_free(png_ptr, new_palette.entries);
+1
+---------------------------------
+967 cve-2004-0599-1.c PU 106 25
+void
+png_handle_sPLT(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
+png_uint_32 skip = 0;
+if (!(png_ptr->mode & PNG_HAVE_IHDR))
+png_error(png_ptr, "Missing IHDR before sPLT");
+else if (png_ptr->mode & PNG_HAVE_IDAT)
+chunkdata = (png_bytep)png_malloc(png_ptr, length + 1);
+slength = (png_size_t)length;
+png_crc_read(png_ptr, (png_bytep)chunkdata, slength);
+if (png_crc_finish(png_ptr, skip))
+chunkdata[slength] = 0x00;
+for (entry_start = chunkdata; *entry_start; entry_start++)
+++entry_start;
+if (entry_start > chunkdata + slength - 2)
+new_palette.depth = *entry_start++;
+entry_size = (new_palette.depth == 8 ? 6 : 10);
+data_length = (slength - (entry_start - chunkdata));
+if (data_length % entry_size)
+new_palette.nentries = (png_int_32) ( data_length / entry_size);
+if ((png_uint_32) new_palette.nentries > (png_uint_32) (PNG_SIZE_MAX /
+png_sizeof(png_sPLT_entry)))
+new_palette.entries = (png_sPLT_entryp)png_malloc_warn(
+png_ptr, new_palette.nentries * png_sizeof(png_sPLT_entry));
+if (new_palette.entries == NULL)
+for (i = 0; i < new_palette.nentries; i++)
+pp->frequency = png_get_uint_16(entry_start); entry_start += 2;
+1
+---------------------------------
+1183 cve-2004-0599-1.c AE 50 12
+void
+png_handle_sPLT(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
+png_uint_32 skip = 0;
+if (!(png_ptr->mode & PNG_HAVE_IHDR))
+png_error(png_ptr, "Missing IHDR before sPLT");
+else if (png_ptr->mode & PNG_HAVE_IDAT)
+chunkdata = (png_bytep)png_malloc(png_ptr, length + 1);
+slength = (png_size_t)length;
+png_crc_read(png_ptr, (png_bytep)chunkdata, slength);
+if (png_crc_finish(png_ptr, skip))
+chunkdata[slength] = 0x00;
+for (entry_start = chunkdata; *entry_start; entry_start++)
+++entry_start;
+if (entry_start > chunkdata + slength - 2)
+png_free(png_ptr, chunkdata);
+png_warning(png_ptr, "malformed sPLT chunk");
+return;
+new_palette.depth = *entry_start++;
+entry_size = (new_palette.depth == 8 ? 6 : 10);
+data_length = (slength - (entry_start - chunkdata));
+if (data_length % entry_size)
+png_free(png_ptr, chunkdata);
+png_warning(png_ptr, "sPLT chunk has bad length");
+return;
+new_palette.nentries = (png_int_32) ( data_length / entry_size);
+if ((png_uint_32) new_palette.nentries > (png_uint_32) (PNG_SIZE_MAX /
+png_sizeof(png_sPLT_entry)))
+png_warning(png_ptr, "sPLT chunk too long");
+return;
+new_palette.entries = (png_sPLT_entryp)png_malloc_warn(
+png_ptr, new_palette.nentries * png_sizeof(png_sPLT_entry));
+if (new_palette.entries == NULL)
+png_warning(png_ptr, "sPLT chunk requires too much memory");
+return;
+for (i = 0; i < new_palette.nentries; i++)
+png_sPLT_entryp pp = new_palette.entries + i;
+if (new_palette.depth == 8)
+pp->red = *entry_start++;
+pp->green = *entry_start++;
+pp->blue = *entry_start++;
+pp->alpha = *entry_start++;
+pp->red   = png_get_uint_16(entry_start); entry_start += 2;
+pp->green = png_get_uint_16(entry_start); entry_start += 2;
+pp->blue  = png_get_uint_16(entry_start); entry_start += 2;
+pp->alpha = png_get_uint_16(entry_start); entry_start += 2;
+pp->frequency = png_get_uint_16(entry_start); entry_start += 2;
+new_palette.name = (png_charp)chunkdata;
+png_set_sPLT(png_ptr, info_ptr, &new_palette, 1);
+png_free(png_ptr, chunkdata);
+png_free(png_ptr, new_palette.entries);
+1
+---------------------------------
+1232 cve-2004-0599-1.c PU 94 26
+void
+png_handle_sPLT(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
+png_uint_32 skip = 0;
+if (!(png_ptr->mode & PNG_HAVE_IHDR))
+png_error(png_ptr, "Missing IHDR before sPLT");
+else if (png_ptr->mode & PNG_HAVE_IDAT)
+chunkdata = (png_bytep)png_malloc(png_ptr, length + 1);
+slength = (png_size_t)length;
+png_crc_read(png_ptr, (png_bytep)chunkdata, slength);
+if (png_crc_finish(png_ptr, skip))
+chunkdata[slength] = 0x00;
+for (entry_start = chunkdata; *entry_start; entry_start++)
+++entry_start;
+if (entry_start > chunkdata + slength - 2)
+new_palette.depth = *entry_start++;
+entry_size = (new_palette.depth == 8 ? 6 : 10);
+data_length = (slength - (entry_start - chunkdata));
+if (data_length % entry_size)
+new_palette.nentries = (png_int_32) ( data_length / entry_size);
+if ((png_uint_32) new_palette.nentries > (png_uint_32) (PNG_SIZE_MAX /
+png_sizeof(png_sPLT_entry)))
+new_palette.entries = (png_sPLT_entryp)png_malloc_warn(
+png_ptr, new_palette.nentries * png_sizeof(png_sPLT_entry));
+if (new_palette.entries == NULL)
+for (i = 0; i < new_palette.nentries; i++)
+if (new_palette.depth == 8)
+pp->red = *entry_start++;
+1
+---------------------------------
+1254 cve-2004-0599-1.c AU 46 10
+void
+png_handle_sPLT(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
+png_uint_32 skip = 0;
+if (!(png_ptr->mode & PNG_HAVE_IHDR))
+png_error(png_ptr, "Missing IHDR before sPLT");
+else if (png_ptr->mode & PNG_HAVE_IDAT)
+chunkdata = (png_bytep)png_malloc(png_ptr, length + 1);
+slength = (png_size_t)length;
+png_crc_read(png_ptr, (png_bytep)chunkdata, slength);
+if (png_crc_finish(png_ptr, skip))
+chunkdata[slength] = 0x00;
+1
+---------------------------------
+1530 cve-2004-0599-1.c PU 134 24
+void
+png_handle_sPLT(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
+png_uint_32 skip = 0;
+if (!(png_ptr->mode & PNG_HAVE_IHDR))
+png_error(png_ptr, "Missing IHDR before sPLT");
+else if (png_ptr->mode & PNG_HAVE_IDAT)
+chunkdata = (png_bytep)png_malloc(png_ptr, length + 1);
+slength = (png_size_t)length;
+png_crc_read(png_ptr, (png_bytep)chunkdata, slength);
+if (png_crc_finish(png_ptr, skip))
+chunkdata[slength] = 0x00;
+for (entry_start = chunkdata; *entry_start; entry_start++)
+++entry_start;
+if (entry_start > chunkdata + slength - 2)
+new_palette.depth = *entry_start++;
+entry_size = (new_palette.depth == 8 ? 6 : 10);
+data_length = (slength - (entry_start - chunkdata));
+if (data_length % entry_size)
+new_palette.nentries = (png_int_32) ( data_length / entry_size);
+if ((png_uint_32) new_palette.nentries > (png_uint_32) (PNG_SIZE_MAX /
+png_sizeof(png_sPLT_entry)))
+new_palette.entries = (png_sPLT_entryp)png_malloc_warn(
+png_ptr, new_palette.nentries * png_sizeof(png_sPLT_entry));
+if (new_palette.entries == NULL)
+png_set_sPLT(png_ptr, info_ptr, &new_palette, 1);
+1
+---------------------------------
+1832 cve-2004-0599-1.c AE 88 24
+void
+png_handle_sPLT(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
+png_uint_32 skip = 0;
+if (!(png_ptr->mode & PNG_HAVE_IHDR))
+png_error(png_ptr, "Missing IHDR before sPLT");
+else if (png_ptr->mode & PNG_HAVE_IDAT)
+chunkdata = (png_bytep)png_malloc(png_ptr, length + 1);
+slength = (png_size_t)length;
+png_crc_read(png_ptr, (png_bytep)chunkdata, slength);
+if (png_crc_finish(png_ptr, skip))
+chunkdata[slength] = 0x00;
+for (entry_start = chunkdata; *entry_start; entry_start++)
+++entry_start;
+if (entry_start > chunkdata + slength - 2)
+new_palette.depth = *entry_start++;
+entry_size = (new_palette.depth == 8 ? 6 : 10);
+data_length = (slength - (entry_start - chunkdata));
+if (data_length % entry_size)
+new_palette.nentries = (png_int_32) ( data_length / entry_size);
+if ((png_uint_32) new_palette.nentries > (png_uint_32) (PNG_SIZE_MAX /
+png_sizeof(png_sPLT_entry)))
+new_palette.entries = (png_sPLT_entryp)png_malloc_warn(
+png_ptr, new_palette.nentries * png_sizeof(png_sPLT_entry));
+if (new_palette.entries == NULL)
+for (i = 0; i < new_palette.nentries; i++)
+png_sPLT_entryp pp = new_palette.entries + i;
+if (new_palette.depth == 8)
+pp->red = *entry_start++;
+pp->green = *entry_start++;
+pp->blue = *entry_start++;
+pp->alpha = *entry_start++;
+pp->red   = png_get_uint_16(entry_start); entry_start += 2;
+pp->green = png_get_uint_16(entry_start); entry_start += 2;
+pp->blue  = png_get_uint_16(entry_start); entry_start += 2;
+pp->alpha = png_get_uint_16(entry_start); entry_start += 2;
+pp->frequency = png_get_uint_16(entry_start); entry_start += 2;
+png_set_sPLT(png_ptr, info_ptr, &new_palette, 1);
+png_free(png_ptr, chunkdata);
+png_free(png_ptr, new_palette.entries);
+1
+---------------------------------
+2183 cve-2004-0599-1.c PU 60 14
+void
+png_handle_sPLT(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
+png_uint_32 skip = 0;
+if (!(png_ptr->mode & PNG_HAVE_IHDR))
+png_error(png_ptr, "Missing IHDR before sPLT");
+else if (png_ptr->mode & PNG_HAVE_IDAT)
+chunkdata = (png_bytep)png_malloc(png_ptr, length + 1);
+slength = (png_size_t)length;
+png_crc_read(png_ptr, (png_bytep)chunkdata, slength);
+if (png_crc_finish(png_ptr, skip))
+chunkdata[slength] = 0x00;
+for (entry_start = chunkdata; *entry_start; entry_start++)
+++entry_start;
+if (entry_start > chunkdata + slength - 2)
+new_palette.depth = *entry_start++;
+1
+---------------------------------
+2246 cve-2004-0599-1.c PU 48 10
+void
+png_handle_sPLT(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
+png_uint_32 skip = 0;
+if (!(png_ptr->mode & PNG_HAVE_IHDR))
+png_error(png_ptr, "Missing IHDR before sPLT");
+else if (png_ptr->mode & PNG_HAVE_IDAT)
+chunkdata = (png_bytep)png_malloc(png_ptr, length + 1);
+slength = (png_size_t)length;
+png_crc_read(png_ptr, (png_bytep)chunkdata, slength);
+if (png_crc_finish(png_ptr, skip))
+for (entry_start = chunkdata; *entry_start; entry_start++)
+++entry_start;
+if (entry_start > chunkdata + slength - 2)
+png_free(png_ptr, chunkdata);
+png_warning(png_ptr, "malformed sPLT chunk");
+return;
+new_palette.depth = *entry_start++;
+entry_size = (new_palette.depth == 8 ? 6 : 10);
+data_length = (slength - (entry_start - chunkdata));
+if (data_length % entry_size)
+png_free(png_ptr, chunkdata);
+png_warning(png_ptr, "sPLT chunk has bad length");
+return;
+new_palette.nentries = (png_int_32) ( data_length / entry_size);
+if ((png_uint_32) new_palette.nentries > (png_uint_32) (PNG_SIZE_MAX /
+png_sizeof(png_sPLT_entry)))
+png_warning(png_ptr, "sPLT chunk too long");
+return;
+new_palette.entries = (png_sPLT_entryp)png_malloc_warn(
+png_ptr, new_palette.nentries * png_sizeof(png_sPLT_entry));
+if (new_palette.entries == NULL)
+png_warning(png_ptr, "sPLT chunk requires too much memory");
+return;
+for (i = 0; i < new_palette.nentries; i++)
+png_sPLT_entryp pp = new_palette.entries + i;
+if (new_palette.depth == 8)
+pp->red = *entry_start++;
+pp->green = *entry_start++;
+pp->blue = *entry_start++;
+pp->alpha = *entry_start++;
+pp->red   = png_get_uint_16(entry_start); entry_start += 2;
+pp->green = png_get_uint_16(entry_start); entry_start += 2;
+pp->blue  = png_get_uint_16(entry_start); entry_start += 2;
+pp->alpha = png_get_uint_16(entry_start); entry_start += 2;
+pp->frequency = png_get_uint_16(entry_start); entry_start += 2;
+new_palette.name = (png_charp)chunkdata;
+png_set_sPLT(png_ptr, info_ptr, &new_palette, 1);
+png_free(png_ptr, chunkdata);
+png_free(png_ptr, new_palette.entries);
+1
+---------------------------------
+2426 cve-2004-0599-1.c AE 90 25
+void
+png_handle_sPLT(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
+png_uint_32 skip = 0;
+if (!(png_ptr->mode & PNG_HAVE_IHDR))
+png_error(png_ptr, "Missing IHDR before sPLT");
+else if (png_ptr->mode & PNG_HAVE_IDAT)
+chunkdata = (png_bytep)png_malloc(png_ptr, length + 1);
+slength = (png_size_t)length;
+png_crc_read(png_ptr, (png_bytep)chunkdata, slength);
+if (png_crc_finish(png_ptr, skip))
+chunkdata[slength] = 0x00;
+for (entry_start = chunkdata; *entry_start; entry_start++)
+++entry_start;
+if (entry_start > chunkdata + slength - 2)
+new_palette.depth = *entry_start++;
+entry_size = (new_palette.depth == 8 ? 6 : 10);
+data_length = (slength - (entry_start - chunkdata));
+if (data_length % entry_size)
+new_palette.nentries = (png_int_32) ( data_length / entry_size);
+if ((png_uint_32) new_palette.nentries > (png_uint_32) (PNG_SIZE_MAX /
+png_sizeof(png_sPLT_entry)))
+new_palette.entries = (png_sPLT_entryp)png_malloc_warn(
+png_ptr, new_palette.nentries * png_sizeof(png_sPLT_entry));
+if (new_palette.entries == NULL)
+for (i = 0; i < new_palette.nentries; i++)
+png_sPLT_entryp pp = new_palette.entries + i;
+1
+---------------------------------
+2736 cve-2004-0599-1.c PU 101 26
+void
+png_handle_sPLT(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
+png_uint_32 skip = 0;
+if (!(png_ptr->mode & PNG_HAVE_IHDR))
+png_error(png_ptr, "Missing IHDR before sPLT");
+else if (png_ptr->mode & PNG_HAVE_IDAT)
+chunkdata = (png_bytep)png_malloc(png_ptr, length + 1);
+slength = (png_size_t)length;
+png_crc_read(png_ptr, (png_bytep)chunkdata, slength);
+if (png_crc_finish(png_ptr, skip))
+chunkdata[slength] = 0x00;
+for (entry_start = chunkdata; *entry_start; entry_start++)
+++entry_start;
+if (entry_start > chunkdata + slength - 2)
+new_palette.depth = *entry_start++;
+entry_size = (new_palette.depth == 8 ? 6 : 10);
+data_length = (slength - (entry_start - chunkdata));
+if (data_length % entry_size)
+new_palette.nentries = (png_int_32) ( data_length / entry_size);
+if ((png_uint_32) new_palette.nentries > (png_uint_32) (PNG_SIZE_MAX /
+png_sizeof(png_sPLT_entry)))
+new_palette.entries = (png_sPLT_entryp)png_malloc_warn(
+png_ptr, new_palette.nentries * png_sizeof(png_sPLT_entry));
+if (new_palette.entries == NULL)
+for (i = 0; i < new_palette.nentries; i++)
+if (new_palette.depth == 8)
+pp->red   = png_get_uint_16(entry_start); entry_start += 2;
+1
+---------------------------------
+2989 cve-2004-0599-1.c AE 65 17
+void
+png_handle_sPLT(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
+png_uint_32 skip = 0;
+if (!(png_ptr->mode & PNG_HAVE_IHDR))
+png_error(png_ptr, "Missing IHDR before sPLT");
+else if (png_ptr->mode & PNG_HAVE_IDAT)
+chunkdata = (png_bytep)png_malloc(png_ptr, length + 1);
+slength = (png_size_t)length;
+png_crc_read(png_ptr, (png_bytep)chunkdata, slength);
+if (png_crc_finish(png_ptr, skip))
+chunkdata[slength] = 0x00;
+for (entry_start = chunkdata; *entry_start; entry_start++)
+++entry_start;
+if (entry_start > chunkdata + slength - 2)
+new_palette.depth = *entry_start++;
+entry_size = (new_palette.depth == 8 ? 6 : 10);
+data_length = (slength - (entry_start - chunkdata));
+if (data_length % entry_size)
+png_free(png_ptr, chunkdata);
+png_warning(png_ptr, "sPLT chunk has bad length");
+return;
+new_palette.nentries = (png_int_32) ( data_length / entry_size);
+if ((png_uint_32) new_palette.nentries > (png_uint_32) (PNG_SIZE_MAX /
+png_sizeof(png_sPLT_entry)))
+png_warning(png_ptr, "sPLT chunk too long");
+return;
+new_palette.entries = (png_sPLT_entryp)png_malloc_warn(
+png_ptr, new_palette.nentries * png_sizeof(png_sPLT_entry));
+if (new_palette.entries == NULL)
+png_warning(png_ptr, "sPLT chunk requires too much memory");
+return;
+for (i = 0; i < new_palette.nentries; i++)
+png_sPLT_entryp pp = new_palette.entries + i;
+if (new_palette.depth == 8)
+pp->red = *entry_start++;
+pp->green = *entry_start++;
+pp->blue = *entry_start++;
+pp->alpha = *entry_start++;
+pp->red   = png_get_uint_16(entry_start); entry_start += 2;
+pp->green = png_get_uint_16(entry_start); entry_start += 2;
+pp->blue  = png_get_uint_16(entry_start); entry_start += 2;
+pp->alpha = png_get_uint_16(entry_start); entry_start += 2;
+pp->frequency = png_get_uint_16(entry_start); entry_start += 2;
+new_palette.name = (png_charp)chunkdata;
+png_set_sPLT(png_ptr, info_ptr, &new_palette, 1);
+png_free(png_ptr, chunkdata);
+png_free(png_ptr, new_palette.entries);
+1
+---------------------------------
+3018 cve-2004-0599-1.c AE 36 4
+void
+png_handle_sPLT(png_structp png_ptr, png_infop info_ptr, png_uint_32 length)
+if (!(png_ptr->mode & PNG_HAVE_IHDR))
+else if (png_ptr->mode & PNG_HAVE_IDAT)
+chunkdata = (png_bytep)png_malloc(png_ptr, length + 1);
+1
+---------------------------------

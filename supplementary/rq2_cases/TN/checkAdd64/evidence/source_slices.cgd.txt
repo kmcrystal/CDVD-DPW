@@ -1,0 +1,72 @@
+376 0049_pngfix.c_IDAT_list_extend.c PU 19 6
+static struct IDAT_list *
+IDAT_list_extend(struct IDAT_list *tail)
+struct IDAT_list *next = tail->next;
+if (next == NULL)
+CLEAR(*next);
+if (next == NULL)
+next->next = NULL;
+0
+---------------------------------
+1170 0049_pngfix.c_IDAT_list_extend.c PU 20 6
+static struct IDAT_list *
+IDAT_list_extend(struct IDAT_list *tail)
+struct IDAT_list *next = tail->next;
+if (next == NULL)
+CLEAR(*next);
+if (next == NULL)
+next->length = length;
+0
+---------------------------------
+1191 0049_pngfix.c_IDAT_list_extend.c PU 12 4
+static struct IDAT_list *
+IDAT_list_extend(struct IDAT_list *tail)
+struct IDAT_list *next = tail->next;
+if (next == NULL)
+if (length < tail->length)
+0
+---------------------------------
+1326 0049_pngfix.c_IDAT_list_extend.c PU 15 4
+static struct IDAT_list *
+IDAT_list_extend(struct IDAT_list *tail)
+struct IDAT_list *next = tail->next;
+if (next == NULL)
+CLEAR(*next);
+0
+---------------------------------
+1692 0049_pngfix.c_IDAT_list_extend.c PU 11 4
+static struct IDAT_list *
+IDAT_list_extend(struct IDAT_list *tail)
+struct IDAT_list *next = tail->next;
+if (next == NULL)
+unsigned int length = 2 * tail->length;
+0
+---------------------------------
+2215 0049_pngfix.c_IDAT_list_extend.c PU 13 6
+static struct IDAT_list *
+IDAT_list_extend(struct IDAT_list *tail)
+struct IDAT_list *next = tail->next;
+if (next == NULL)
+unsigned int length = 2 * tail->length;
+if (length < tail->length)
+length = tail->length;
+0
+---------------------------------
+2387 0049_pngfix.c_IDAT_list_extend.c PU 21 6
+static struct IDAT_list *
+IDAT_list_extend(struct IDAT_list *tail)
+struct IDAT_list *next = tail->next;
+if (next == NULL)
+CLEAR(*next);
+if (next == NULL)
+tail->next = next;
+0
+---------------------------------
+2405 0049_pngfix.c_IDAT_list_extend.c FC:malloc 14 4
+static struct IDAT_list *
+IDAT_list_extend(struct IDAT_list *tail)
+struct IDAT_list *next = tail->next;
+if (next == NULL)
+next = png_voidcast(IDAT_list*, malloc(IDAT_list_size(NULL, length)));
+0
+---------------------------------

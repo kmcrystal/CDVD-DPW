@@ -1,0 +1,4 @@
+TIFFImageIterEnd(TIFFImageIter* img)
+{
+    
+}

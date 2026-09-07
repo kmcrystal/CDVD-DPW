@@ -1,0 +1,256 @@
+195 _CVE-2012-3374.c PU 10 1
+void mxit_show_message( struct RXMsgData* mx )
+if ( mx->got_img ) {
+while ( ( pos = strstr( mx->msg->str, MXIT_II_TAG ) ) != NULL ) {
+start = pos - mx->msg->str;					/* offset at which MXIT_II_TAG starts */
+emo_ofs = start + strlen( MXIT_II_TAG );	/* offset at which EMO's ID starts */
+end = emo_ofs + 1;							/* offset at which MXIT_II_TAG ends */
+while ( ( end < mx->msg->len ) && ( mx->msg->str[end] != '>' ) )
+end++;
+if ( end == mx->msg->len )			/* end of emoticon tag not found */
+memset( ii, 0x00, sizeof( ii ) );
+memcpy( ii, &mx->msg->str[emo_ofs], end - emo_ofs );
+g_string_erase( mx->msg, start, ( end - start ) + 1 );
+img_id = (int*) g_hash_table_lookup( mx->session->iimages, ii );
+if ( !img_id ) {
+purple_debug_error( MXIT_PLUGIN_ID, "inline image NOT found (%s)\n", ii );
+g_snprintf( tag, sizeof( tag ), "<img id=\"%i\">", *img_id );
+g_string_insert( mx->msg, start, tag );
+mxit_show_split_message( mx );
+serv_got_chat_in( mx->session->con, mx->chatid, mx->from, mx->flags, mx->msg->str, mx->timestamp);
+free_markupdata( mx );
+1
+---------------------------------
+196 _CVE-2012-3374.c PU 12 2
+void mxit_show_message( struct RXMsgData* mx )
+if ( mx->got_img ) {
+while ( ( pos = strstr( mx->msg->str, MXIT_II_TAG ) ) != NULL ) {
+start = pos - mx->msg->str;					/* offset at which MXIT_II_TAG starts */
+emo_ofs = start + strlen( MXIT_II_TAG );	/* offset at which EMO's ID starts */
+end = emo_ofs + 1;							/* offset at which MXIT_II_TAG ends */
+while ( ( end < mx->msg->len ) && ( mx->msg->str[end] != '>' ) )
+end++;
+if ( end == mx->msg->len )			/* end of emoticon tag not found */
+memset( ii, 0x00, sizeof( ii ) );
+memcpy( ii, &mx->msg->str[emo_ofs], end - emo_ofs );
+1
+---------------------------------
+197 _CVE-2012-3374.c PU 13 3
+void mxit_show_message( struct RXMsgData* mx )
+if ( mx->got_img ) {
+while ( ( pos = strstr( mx->msg->str, MXIT_II_TAG ) ) != NULL ) {
+start = pos - mx->msg->str;					/* offset at which MXIT_II_TAG starts */
+emo_ofs = start + strlen( MXIT_II_TAG );	/* offset at which EMO's ID starts */
+end = emo_ofs + 1;							/* offset at which MXIT_II_TAG ends */
+while ( ( end < mx->msg->len ) && ( mx->msg->str[end] != '>' ) )
+end++;
+if ( end == mx->msg->len )			/* end of emoticon tag not found */
+memset( ii, 0x00, sizeof( ii ) );
+memcpy( ii, &mx->msg->str[emo_ofs], end - emo_ofs );
+1
+---------------------------------
+198 _CVE-2012-3374.c FC:strlen 14 4
+void mxit_show_message( struct RXMsgData* mx )
+if ( mx->got_img ) {
+while ( ( pos = strstr( mx->msg->str, MXIT_II_TAG ) ) != NULL ) {
+start = pos - mx->msg->str;					/* offset at which MXIT_II_TAG starts */
+emo_ofs = start + strlen( MXIT_II_TAG );	/* offset at which EMO's ID starts */
+end = emo_ofs + 1;							/* offset at which MXIT_II_TAG ends */
+while ( ( end < mx->msg->len ) && ( mx->msg->str[end] != '>' ) )
+end++;
+if ( end == mx->msg->len )			/* end of emoticon tag not found */
+memset( ii, 0x00, sizeof( ii ) );
+memcpy( ii, &mx->msg->str[emo_ofs], end - emo_ofs );
+g_string_erase( mx->msg, start, ( end - start ) + 1 );
+img_id = (int*) g_hash_table_lookup( mx->session->iimages, ii );
+if ( !img_id ) {
+purple_debug_error( MXIT_PLUGIN_ID, "inline image NOT found (%s)\n", ii );
+g_snprintf( tag, sizeof( tag ), "<img id=\"%i\">", *img_id );
+g_string_insert( mx->msg, start, tag );
+mxit_show_split_message( mx );
+serv_got_chat_in( mx->session->con, mx->chatid, mx->from, mx->flags, mx->msg->str, mx->timestamp);
+free_markupdata( mx );
+1
+---------------------------------
+199 _CVE-2012-3374.c AE 15 5
+void mxit_show_message( struct RXMsgData* mx )
+if ( mx->got_img ) {
+while ( ( pos = strstr( mx->msg->str, MXIT_II_TAG ) ) != NULL ) {
+start = pos - mx->msg->str;					/* offset at which MXIT_II_TAG starts */
+emo_ofs = start + strlen( MXIT_II_TAG );	/* offset at which EMO's ID starts */
+end = emo_ofs + 1;							/* offset at which MXIT_II_TAG ends */
+while ( ( end < mx->msg->len ) && ( mx->msg->str[end] != '>' ) )
+end++;
+if ( end == mx->msg->len )			/* end of emoticon tag not found */
+memset( ii, 0x00, sizeof( ii ) );
+memcpy( ii, &mx->msg->str[emo_ofs], end - emo_ofs );
+1
+---------------------------------
+200 _CVE-2012-3374.c AU 16 6
+void mxit_show_message( struct RXMsgData* mx )
+if ( mx->got_img ) {
+while ( ( pos = strstr( mx->msg->str, MXIT_II_TAG ) ) != NULL ) {
+start = pos - mx->msg->str;					/* offset at which MXIT_II_TAG starts */
+emo_ofs = start + strlen( MXIT_II_TAG );	/* offset at which EMO's ID starts */
+end = emo_ofs + 1;							/* offset at which MXIT_II_TAG ends */
+while ( ( end < mx->msg->len ) && ( mx->msg->str[end] != '>' ) )
+end++;
+if ( end == mx->msg->len )			/* end of emoticon tag not found */
+memset( ii, 0x00, sizeof( ii ) );
+memcpy( ii, &mx->msg->str[emo_ofs], end - emo_ofs );
+1
+---------------------------------
+201 _CVE-2012-3374.c AE 17 7
+void mxit_show_message( struct RXMsgData* mx )
+if ( mx->got_img ) {
+while ( ( pos = strstr( mx->msg->str, MXIT_II_TAG ) ) != NULL ) {
+start = pos - mx->msg->str;					/* offset at which MXIT_II_TAG starts */
+emo_ofs = start + strlen( MXIT_II_TAG );	/* offset at which EMO's ID starts */
+end = emo_ofs + 1;							/* offset at which MXIT_II_TAG ends */
+while ( ( end < mx->msg->len ) && ( mx->msg->str[end] != '>' ) )
+end++;
+if ( end == mx->msg->len )			/* end of emoticon tag not found */
+memset( ii, 0x00, sizeof( ii ) );
+memcpy( ii, &mx->msg->str[emo_ofs], end - emo_ofs );
+g_string_erase( mx->msg, start, ( end - start ) + 1 );
+img_id = (int*) g_hash_table_lookup( mx->session->iimages, ii );
+if ( !img_id ) {
+purple_debug_error( MXIT_PLUGIN_ID, "inline image NOT found (%s)\n", ii );
+g_snprintf( tag, sizeof( tag ), "<img id=\"%i\">", *img_id );
+g_string_insert( mx->msg, start, tag );
+mxit_show_split_message( mx );
+serv_got_chat_in( mx->session->con, mx->chatid, mx->from, mx->flags, mx->msg->str, mx->timestamp);
+free_markupdata( mx );
+1
+---------------------------------
+202 _CVE-2012-3374.c PU 18 8
+void mxit_show_message( struct RXMsgData* mx )
+if ( mx->got_img ) {
+while ( ( pos = strstr( mx->msg->str, MXIT_II_TAG ) ) != NULL ) {
+start = pos - mx->msg->str;					/* offset at which MXIT_II_TAG starts */
+emo_ofs = start + strlen( MXIT_II_TAG );	/* offset at which EMO's ID starts */
+end = emo_ofs + 1;							/* offset at which MXIT_II_TAG ends */
+while ( ( end < mx->msg->len ) && ( mx->msg->str[end] != '>' ) )
+end++;
+if ( end == mx->msg->len )			/* end of emoticon tag not found */
+memset( ii, 0x00, sizeof( ii ) );
+memcpy( ii, &mx->msg->str[emo_ofs], end - emo_ofs );
+1
+---------------------------------
+203 _CVE-2012-3374.c FC:memset 20 9
+void mxit_show_message( struct RXMsgData* mx )
+if ( mx->got_img ) {
+while ( ( pos = strstr( mx->msg->str, MXIT_II_TAG ) ) != NULL ) {
+start = pos - mx->msg->str;					/* offset at which MXIT_II_TAG starts */
+emo_ofs = start + strlen( MXIT_II_TAG );	/* offset at which EMO's ID starts */
+end = emo_ofs + 1;							/* offset at which MXIT_II_TAG ends */
+while ( ( end < mx->msg->len ) && ( mx->msg->str[end] != '>' ) )
+end++;
+if ( end == mx->msg->len )			/* end of emoticon tag not found */
+memset( ii, 0x00, sizeof( ii ) );
+memcpy( ii, &mx->msg->str[emo_ofs], end - emo_ofs );
+g_string_erase( mx->msg, start, ( end - start ) + 1 );
+img_id = (int*) g_hash_table_lookup( mx->session->iimages, ii );
+if ( !img_id ) {
+purple_debug_error( MXIT_PLUGIN_ID, "inline image NOT found (%s)\n", ii );
+g_snprintf( tag, sizeof( tag ), "<img id=\"%i\">", *img_id );
+g_string_insert( mx->msg, start, tag );
+mxit_show_split_message( mx );
+serv_got_chat_in( mx->session->con, mx->chatid, mx->from, mx->flags, mx->msg->str, mx->timestamp);
+free_markupdata( mx );
+1
+---------------------------------
+204 _CVE-2012-3374.c FC:memcpy 21 10
+void mxit_show_message( struct RXMsgData* mx )
+if ( mx->got_img ) {
+while ( ( pos = strstr( mx->msg->str, MXIT_II_TAG ) ) != NULL ) {
+start = pos - mx->msg->str;					/* offset at which MXIT_II_TAG starts */
+emo_ofs = start + strlen( MXIT_II_TAG );	/* offset at which EMO's ID starts */
+end = emo_ofs + 1;							/* offset at which MXIT_II_TAG ends */
+while ( ( end < mx->msg->len ) && ( mx->msg->str[end] != '>' ) )
+end++;
+if ( end == mx->msg->len )			/* end of emoticon tag not found */
+memset( ii, 0x00, sizeof( ii ) );
+memcpy( ii, &mx->msg->str[emo_ofs], end - emo_ofs );
+g_string_erase( mx->msg, start, ( end - start ) + 1 );
+img_id = (int*) g_hash_table_lookup( mx->session->iimages, ii );
+if ( !img_id ) {
+purple_debug_error( MXIT_PLUGIN_ID, "inline image NOT found (%s)\n", ii );
+g_snprintf( tag, sizeof( tag ), "<img id=\"%i\">", *img_id );
+g_string_insert( mx->msg, start, tag );
+mxit_show_split_message( mx );
+serv_got_chat_in( mx->session->con, mx->chatid, mx->from, mx->flags, mx->msg->str, mx->timestamp);
+free_markupdata( mx );
+1
+---------------------------------
+205 _CVE-2012-3374.c PU 23 11
+void mxit_show_message( struct RXMsgData* mx )
+if ( mx->got_img ) {
+while ( ( pos = strstr( mx->msg->str, MXIT_II_TAG ) ) != NULL ) {
+start = pos - mx->msg->str;					/* offset at which MXIT_II_TAG starts */
+emo_ofs = start + strlen( MXIT_II_TAG );	/* offset at which EMO's ID starts */
+end = emo_ofs + 1;							/* offset at which MXIT_II_TAG ends */
+while ( ( end < mx->msg->len ) && ( mx->msg->str[end] != '>' ) )
+end++;
+if ( end == mx->msg->len )			/* end of emoticon tag not found */
+memset( ii, 0x00, sizeof( ii ) );
+memcpy( ii, &mx->msg->str[emo_ofs], end - emo_ofs );
+g_string_erase( mx->msg, start, ( end - start ) + 1 );
+1
+---------------------------------
+206 _CVE-2012-3374.c PU 25 11
+void mxit_show_message( struct RXMsgData* mx )
+if ( mx->got_img ) {
+while ( ( pos = strstr( mx->msg->str, MXIT_II_TAG ) ) != NULL ) {
+start = pos - mx->msg->str;					/* offset at which MXIT_II_TAG starts */
+emo_ofs = start + strlen( MXIT_II_TAG );	/* offset at which EMO's ID starts */
+end = emo_ofs + 1;							/* offset at which MXIT_II_TAG ends */
+while ( ( end < mx->msg->len ) && ( mx->msg->str[end] != '>' ) )
+end++;
+if ( end == mx->msg->len )			/* end of emoticon tag not found */
+memset( ii, 0x00, sizeof( ii ) );
+memcpy( ii, &mx->msg->str[emo_ofs], end - emo_ofs );
+img_id = (int*) g_hash_table_lookup( mx->session->iimages, ii );
+1
+---------------------------------
+207 _CVE-2012-3374.c PU 32 13
+void mxit_show_message( struct RXMsgData* mx )
+if ( mx->got_img ) {
+while ( ( pos = strstr( mx->msg->str, MXIT_II_TAG ) ) != NULL ) {
+start = pos - mx->msg->str;					/* offset at which MXIT_II_TAG starts */
+emo_ofs = start + strlen( MXIT_II_TAG );	/* offset at which EMO's ID starts */
+end = emo_ofs + 1;							/* offset at which MXIT_II_TAG ends */
+while ( ( end < mx->msg->len ) && ( mx->msg->str[end] != '>' ) )
+end++;
+if ( end == mx->msg->len )			/* end of emoticon tag not found */
+memset( ii, 0x00, sizeof( ii ) );
+memcpy( ii, &mx->msg->str[emo_ofs], end - emo_ofs );
+img_id = (int*) g_hash_table_lookup( mx->session->iimages, ii );
+if ( !img_id ) {
+g_snprintf( tag, sizeof( tag ), "<img id=\"%i\">", *img_id );
+1
+---------------------------------
+208 _CVE-2012-3374.c PU 33 14
+void mxit_show_message( struct RXMsgData* mx )
+if ( mx->got_img ) {
+while ( ( pos = strstr( mx->msg->str, MXIT_II_TAG ) ) != NULL ) {
+start = pos - mx->msg->str;					/* offset at which MXIT_II_TAG starts */
+emo_ofs = start + strlen( MXIT_II_TAG );	/* offset at which EMO's ID starts */
+end = emo_ofs + 1;							/* offset at which MXIT_II_TAG ends */
+while ( ( end < mx->msg->len ) && ( mx->msg->str[end] != '>' ) )
+end++;
+if ( end == mx->msg->len )			/* end of emoticon tag not found */
+memset( ii, 0x00, sizeof( ii ) );
+memcpy( ii, &mx->msg->str[emo_ofs], end - emo_ofs );
+img_id = (int*) g_hash_table_lookup( mx->session->iimages, ii );
+if ( !img_id ) {
+g_snprintf( tag, sizeof( tag ), "<img id=\"%i\">", *img_id );
+g_string_insert( mx->msg, start, tag );
+1
+---------------------------------
+209 _CVE-2012-3374.c PU 49 2
+void mxit_show_message( struct RXMsgData* mx )
+else if ( mx->chatid < 0 ) {
+serv_got_chat_in( mx->session->con, mx->chatid, mx->from, mx->flags, mx->msg->str, mx->timestamp);
+1
+---------------------------------

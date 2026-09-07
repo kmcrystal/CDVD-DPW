@@ -1,0 +1,792 @@
+283 cve-2013-1960.c AU 69 15
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+1
+---------------------------------
+430 cve-2013-1960.c AU 30 14
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+unsigned char* buffer,
+tstrip_t no,
+uint32 height){
+tsize_t i=0;
+uint16 v_samp=1;
+uint16 h_samp=1;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+for(j=0;j<buffer[*bufferoffset+9];j++){
+if( (buffer[*bufferoffset+11+(2*j)]>>4) > h_samp)
+h_samp = (buffer[*bufferoffset+11+(2*j)]>>4);
+if( (buffer[*bufferoffset+11+(2*j)] & 0x0f) > v_samp)
+v_samp = (buffer[*bufferoffset+11+(2*j)] & 0x0f);
+v_samp*=8;
+h_samp*=8;
+ri=((( ((uint16)(buffer[*bufferoffset+5])<<8) |
+(uint16)(buffer[*bufferoffset+6]) )+v_samp-1)/
+ri*=((( ((uint16)(buffer[*bufferoffset+7])<<8) |
+(uint16)(buffer[*bufferoffset+8]) )+h_samp-1)/
+(unsigned char) ((height>>8) & 0xff);
+(unsigned char) (height & 0xff);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+1
+---------------------------------
+442 cve-2013-1960.c AU 38 10
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+ri=((( ((uint16)(buffer[*bufferoffset+5])<<8) |
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+1
+---------------------------------
+492 cve-2013-1960.c AU 39 10
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+(uint16)(buffer[*bufferoffset+6]) )+v_samp-1)/
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+1
+---------------------------------
+877 cve-2013-1960.c AU 44 10
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+buffer[*bufferoffset+5]=
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+1
+---------------------------------
+1220 cve-2013-1960.c AE 75 15
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+if(no==0){
+(unsigned char)(0xd0 | ((no-1)%8));
+i+=strip[i+2]+2;
+1
+---------------------------------
+1479 cve-2013-1960.c PU 18 5
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+1
+---------------------------------
+1798 cve-2013-1960.c AU 74 15
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+if(no==0){
+buffer[(*bufferoffset)++]=
+i+=strip[i+2]+2;
+1
+---------------------------------
+2319 cve-2013-1960.c AE 45 21
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+uint32 height){
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+for(j=0;j<buffer[*bufferoffset+9];j++){
+if( (buffer[*bufferoffset+11+(2*j)]>>4) > h_samp)
+h_samp = (buffer[*bufferoffset+11+(2*j)]>>4);
+if( (buffer[*bufferoffset+11+(2*j)] & 0x0f) > v_samp)
+v_samp = (buffer[*bufferoffset+11+(2*j)] & 0x0f);
+v_samp*=8;
+h_samp*=8;
+ri=((( ((uint16)(buffer[*bufferoffset+5])<<8) |
+(uint16)(buffer[*bufferoffset+6]) )+v_samp-1)/
+ri*=((( ((uint16)(buffer[*bufferoffset+7])<<8) |
+(unsigned char) ((height>>8) & 0xff);
+(unsigned char) (height & 0xff);
+i+=strip[i+2]+2;
+buffer[(*bufferoffset)++]=(ri >> 8) & 0xff;
+buffer[(*bufferoffset)++]= ri & 0xff;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+1
+---------------------------------
+2344 cve-2013-1960.c AU 82 14
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+1
+---------------------------------
+2363 cve-2013-1960.c AU 48 10
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+*bufferoffset+=strip[i+2]+2;
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+1
+---------------------------------
+2401 cve-2013-1960.c AU 58 11
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+1
+---------------------------------
+2454 cve-2013-1960.c AU 51 11
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+buffer[(*bufferoffset)++]=0xff;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+1
+---------------------------------
+3343 cve-2013-1960.c AU 34 18
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+unsigned char* buffer,
+tstrip_t no,
+uint32 height){
+tsize_t i=0;
+uint16 v_samp=1;
+uint16 h_samp=1;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+for(j=0;j<buffer[*bufferoffset+9];j++){
+if( (buffer[*bufferoffset+11+(2*j)]>>4) > h_samp)
+h_samp = (buffer[*bufferoffset+11+(2*j)]>>4);
+if( (buffer[*bufferoffset+11+(2*j)] & 0x0f) > v_samp)
+v_samp = (buffer[*bufferoffset+11+(2*j)] & 0x0f);
+v_samp*=8;
+h_samp*=8;
+ri=((( ((uint16)(buffer[*bufferoffset+5])<<8) |
+(uint16)(buffer[*bufferoffset+6]) )+v_samp-1)/
+ri*=((( ((uint16)(buffer[*bufferoffset+7])<<8) |
+(uint16)(buffer[*bufferoffset+8]) )+h_samp-1)/
+(unsigned char) ((height>>8) & 0xff);
+(unsigned char) (height & 0xff);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+1
+---------------------------------
+3345 cve-2013-1960.c AU 71 15
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+if(no==0){
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+1
+---------------------------------
+3373 cve-2013-1960.c AU 46 10
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+buffer[*bufferoffset+6]=
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+1
+---------------------------------
+3375 cve-2013-1960.c AU 73 15
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+if(no==0){
+buffer[(*bufferoffset)++]=0xff;
+i+=strip[i+2]+2;
+1
+---------------------------------
+3790 cve-2013-1960.c AU 64 13
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+*bufferoffset+=strip[i+2]+2;
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+1
+---------------------------------
+4068 cve-2013-1960.c AU 70 15
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+if(no==0){
+*bufferoffset+=strip[i+2]+2;
+i+=strip[i+2]+2;
+1
+---------------------------------
+4127 cve-2013-1960.c AU 78 14
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), (*striplength)-i-1);
+i+=strip[i+2]+2;
+1
+---------------------------------
+4376 cve-2013-1960.c AU 29 9
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+1
+---------------------------------
+4759 cve-2013-1960.c AE 16 2
+int t2p_process_jpeg_strip(
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+for(j=0;j<buffer[*bufferoffset+9];j++){
+if( (buffer[*bufferoffset+11+(2*j)]>>4) > h_samp)
+h_samp = (buffer[*bufferoffset+11+(2*j)]>>4);
+if( (buffer[*bufferoffset+11+(2*j)] & 0x0f) > v_samp)
+v_samp = (buffer[*bufferoffset+11+(2*j)] & 0x0f);
+v_samp*=8;
+h_samp*=8;
+ri=((( ((uint16)(buffer[*bufferoffset+5])<<8) |
+(uint16)(buffer[*bufferoffset+6]) )+v_samp-1)/
+ri*=((( ((uint16)(buffer[*bufferoffset+7])<<8) |
+(uint16)(buffer[*bufferoffset+8]) )+h_samp-1)/
+buffer[*bufferoffset+5]=
+(unsigned char) ((height>>8) & 0xff);
+buffer[*bufferoffset+6]=
+(unsigned char) (height & 0xff);
+*bufferoffset+=strip[i+2]+2;
+i+=strip[i+2]+2;
+buffer[(*bufferoffset)++]=0xff;
+buffer[(*bufferoffset)++]=0xdd;
+buffer[(*bufferoffset)++]=0x00;
+buffer[(*bufferoffset)++]=0x04;
+buffer[(*bufferoffset)++]=(ri >> 8) & 0xff;
+buffer[(*bufferoffset)++]= ri & 0xff;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+*bufferoffset+=strip[i+2]+2;
+i+=strip[i+2]+2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+*bufferoffset+=strip[i+2]+2;
+i+=strip[i+2]+2;
+buffer[(*bufferoffset)++]=0xff;
+buffer[(*bufferoffset)++]=
+(unsigned char)(0xd0 | ((no-1)%8));
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), (*striplength)-i-1);
+*bufferoffset+=(*striplength)-i-1;
+return(1);
+i+=strip[i+2]+2;
+return(0);
+1
+---------------------------------
+4789 cve-2013-1960.c AU 53 11
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+buffer[(*bufferoffset)++]=0x00;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+1
+---------------------------------
+5097 cve-2013-1960.c PU 79 14
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+*bufferoffset+=(*striplength)-i-1;
+i+=strip[i+2]+2;
+1
+---------------------------------
+5102 cve-2013-1960.c AU 56 11
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+buffer[(*bufferoffset)++]= ri & 0xff;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+1
+---------------------------------
+5150 cve-2013-1960.c AU 41 10
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+ri*=((( ((uint16)(buffer[*bufferoffset+7])<<8) |
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+1
+---------------------------------
+5323 cve-2013-1960.c AU 65 13
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+1
+---------------------------------
+5416 cve-2013-1960.c AU 55 11
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+buffer[(*bufferoffset)++]=(ri >> 8) & 0xff;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+1
+---------------------------------
+5538 cve-2013-1960.c AU 19 6
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+for(j=0;j<buffer[*bufferoffset+9];j++){
+if( (buffer[*bufferoffset+11+(2*j)]>>4) > h_samp)
+h_samp = (buffer[*bufferoffset+11+(2*j)]>>4);
+if( (buffer[*bufferoffset+11+(2*j)] & 0x0f) > v_samp)
+v_samp = (buffer[*bufferoffset+11+(2*j)] & 0x0f);
+v_samp*=8;
+h_samp*=8;
+ri=((( ((uint16)(buffer[*bufferoffset+5])<<8) |
+(uint16)(buffer[*bufferoffset+6]) )+v_samp-1)/
+ri*=((( ((uint16)(buffer[*bufferoffset+7])<<8) |
+(uint16)(buffer[*bufferoffset+8]) )+h_samp-1)/
+buffer[*bufferoffset+5]=
+(unsigned char) ((height>>8) & 0xff);
+buffer[*bufferoffset+6]=
+(unsigned char) (height & 0xff);
+*bufferoffset+=strip[i+2]+2;
+i+=strip[i+2]+2;
+buffer[(*bufferoffset)++]=0xff;
+buffer[(*bufferoffset)++]=0xdd;
+buffer[(*bufferoffset)++]=0x00;
+buffer[(*bufferoffset)++]=0x04;
+buffer[(*bufferoffset)++]=(ri >> 8) & 0xff;
+buffer[(*bufferoffset)++]= ri & 0xff;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+*bufferoffset+=strip[i+2]+2;
+i+=strip[i+2]+2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+*bufferoffset+=strip[i+2]+2;
+i+=strip[i+2]+2;
+buffer[(*bufferoffset)++]=0xff;
+buffer[(*bufferoffset)++]=
+(unsigned char)(0xd0 | ((no-1)%8));
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), (*striplength)-i-1);
+*bufferoffset+=(*striplength)-i-1;
+return(1);
+i+=strip[i+2]+2;
+return(0);
+1
+---------------------------------
+5892 cve-2013-1960.c AU 52 11
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+buffer[(*bufferoffset)++]=0xdd;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+1
+---------------------------------
+5914 cve-2013-1960.c AU 49 10
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+1
+---------------------------------
+6005 cve-2013-1960.c AU 63 12
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+1
+---------------------------------
+6025 cve-2013-1960.c AU 54 11
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+buffer[(*bufferoffset)++]=0x04;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+1
+---------------------------------
+6226 cve-2013-1960.c AU 42 10
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+tstrip_t no,
+tsize_t i=0;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+(uint16)(buffer[*bufferoffset+8]) )+h_samp-1)/
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+1
+---------------------------------
+6411 cve-2013-1960.c AU 33 17
+int t2p_process_jpeg_strip(
+unsigned char* strip,
+unsigned char* buffer,
+tstrip_t no,
+uint32 height){
+tsize_t i=0;
+uint16 v_samp=1;
+uint16 h_samp=1;
+i++;
+while(i<(*striplength)){
+switch( strip[i] ){
+i+=2;
+if(no==0){
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+for(j=0;j<buffer[*bufferoffset+9];j++){
+if( (buffer[*bufferoffset+11+(2*j)]>>4) > h_samp)
+h_samp = (buffer[*bufferoffset+11+(2*j)]>>4);
+if( (buffer[*bufferoffset+11+(2*j)] & 0x0f) > v_samp)
+v_samp = (buffer[*bufferoffset+11+(2*j)] & 0x0f);
+v_samp*=8;
+h_samp*=8;
+ri=((( ((uint16)(buffer[*bufferoffset+5])<<8) |
+(uint16)(buffer[*bufferoffset+6]) )+v_samp-1)/
+ri*=((( ((uint16)(buffer[*bufferoffset+7])<<8) |
+(uint16)(buffer[*bufferoffset+8]) )+h_samp-1)/
+(unsigned char) ((height>>8) & 0xff);
+(unsigned char) (height & 0xff);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+_TIFFmemcpy(&(buffer[*bufferoffset]), &(strip[i-1]), strip[i+2]+2);
+i+=strip[i+2]+2;
+i+=strip[i+2]+2;
+1
+---------------------------------

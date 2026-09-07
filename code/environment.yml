@@ -1,0 +1,15 @@
+# Conda alternative to requirements.txt (CPU version).
+# Usage: conda env create -f environment.yml && conda activate cdvd-dpw
+name: cdvd-dpw
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+      - numpy==1.26.4
+      - scipy==1.12.0
+      - pandas==2.1.4
+      - scikit-learn==1.3.2
+      - gensim==4.3.2
+      - tensorflow==2.15.1

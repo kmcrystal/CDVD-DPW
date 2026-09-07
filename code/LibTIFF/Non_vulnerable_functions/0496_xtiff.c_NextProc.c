@@ -1,0 +1,5 @@
+void
+NextProc()
+{
+    PageProc(ButtonNextPage);
+}

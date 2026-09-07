@@ -1,0 +1,855 @@
+469 _CVE-2016-2371.c PU 14 2
+int mxit_parse_packet( struct MXitSession* session )
+i = 0;
+while ( i < session->rx_i ) {
+memset( &packet, 0x00, sizeof( struct rx_packet ) );
+rec = add_record( &packet );
+pbreak = FALSE;
+while ( ( i < session->rx_i ) && ( !pbreak ) ) {
+switch ( session->rx_dbuf[i] ) {
+if ( packet.rcount == 1 ) {
+packet.cmd = atoi( packet.records[0]->fields[0]->data );
+else if ( packet.rcount == 2 ) {
+if ( packet.cmd == CP_CMD_MEDIA ) {
+rec = add_record( &packet );
+field = add_field( rec );
+field->data = &session->rx_dbuf[i + 1];
+field->len = session->rx_i - i;
+res = get_chunk_len( field->data );
+if ( res + 6 + i < session->rx_i ) {
+i += res + 6;
+pbreak = TRUE;
+i = session->rx_i;
+rec = add_record( &packet );
+pbreak = TRUE;
+i++;
+if ( packet.rcount < 2 ) {
+purple_connection_error( session->con, _( "Invalid packet received from MXit." ) );
+free_rx_packet( &packet );
+packet.errcode = atoi( packet.records[1]->fields[0]->data );
+purple_debug_info( MXIT_PLUGIN_ID, "Packet received CMD:%i (%i)\n", packet.cmd, packet.errcode );
+if ( session->outack == packet.cmd ) {
+session->outack = 0;
+if ( packet.errcode != MXIT_ERRCODE_SUCCESS ) {
+if ( ( packet.records[1]->fcount > 1 ) && ( packet.records[1]->fields[1]->data ) )
+packet.errmsg = packet.records[1]->fields[1]->data;
+packet.errmsg = NULL;
+res = process_error_response( session, &packet );
+res = process_success_response( session, &packet );
+free_rx_packet( &packet );
+1
+---------------------------------
+470 _CVE-2016-2371.c FC:memset 18 5
+int mxit_parse_packet( struct MXitSession* session )
+i = 0;
+while ( i < session->rx_i ) {
+rec = NULL;
+field = NULL;
+memset( &packet, 0x00, sizeof( struct rx_packet ) );
+rec = add_record( &packet );
+pbreak = FALSE;
+while ( ( i < session->rx_i ) && ( !pbreak ) ) {
+switch ( session->rx_dbuf[i] ) {
+if ( packet.rcount == 1 ) {
+packet.cmd = atoi( packet.records[0]->fields[0]->data );
+else if ( packet.rcount == 2 ) {
+if ( packet.cmd == CP_CMD_MEDIA ) {
+rec = add_record( &packet );
+field = add_field( rec );
+field->data = &session->rx_dbuf[i + 1];
+field->len = session->rx_i - i;
+res = get_chunk_len( field->data );
+if ( res + 6 + i < session->rx_i ) {
+i += res + 6;
+pbreak = TRUE;
+i = session->rx_i;
+else if ( !field ) {
+field = add_field( rec );
+field->data = &session->rx_dbuf[i];
+session->rx_dbuf[i] = '\0';
+rec = add_record( &packet );
+field = NULL;
+session->rx_dbuf[i] = '\0';
+if ( !field ) {
+field = add_field( rec );
+field->data = &session->rx_dbuf[i];
+field = NULL;
+session->rx_dbuf[i] = '\0';
+pbreak = TRUE;
+if ( !field ) {
+field = add_field( rec );
+field->data = &session->rx_dbuf[i];
+field->len++;
+i++;
+if ( packet.rcount < 2 ) {
+purple_connection_error( session->con, _( "Invalid packet received from MXit." ) );
+free_rx_packet( &packet );
+session->rx_dbuf[session->rx_i] = '\0';
+packet.errcode = atoi( packet.records[1]->fields[0]->data );
+purple_debug_info( MXIT_PLUGIN_ID, "Packet received CMD:%i (%i)\n", packet.cmd, packet.errcode );
+if ( session->outack == packet.cmd ) {
+session->outack = 0;
+if ( packet.errcode != MXIT_ERRCODE_SUCCESS ) {
+if ( ( packet.records[1]->fcount > 1 ) && ( packet.records[1]->fields[1]->data ) )
+packet.errmsg = packet.records[1]->fields[1]->data;
+packet.errmsg = NULL;
+res = process_error_response( session, &packet );
+res = process_success_response( session, &packet );
+free_rx_packet( &packet );
+if ( session->outack == 0 )
+mxit_manage_queue( session );
+return res;
+1
+---------------------------------
+471 _CVE-2016-2371.c AU 36 14
+int mxit_parse_packet( struct MXitSession* session )
+i = 0;
+while ( i < session->rx_i ) {
+memset( &packet, 0x00, sizeof( struct rx_packet ) );
+rec = add_record( &packet );
+pbreak = FALSE;
+while ( ( i < session->rx_i ) && ( !pbreak ) ) {
+switch ( session->rx_dbuf[i] ) {
+if ( packet.rcount == 1 ) {
+packet.cmd = atoi( packet.records[0]->fields[0]->data );
+else if ( packet.rcount == 2 ) {
+if ( packet.cmd == CP_CMD_MEDIA ) {
+rec = add_record( &packet );
+field = add_field( rec );
+field->data = &session->rx_dbuf[i + 1];
+field->len = session->rx_i - i;
+res = get_chunk_len( field->data );
+if ( res + 6 + i < session->rx_i ) {
+i += res + 6;
+pbreak = TRUE;
+i = session->rx_i;
+rec = add_record( &packet );
+pbreak = TRUE;
+i++;
+if ( packet.rcount < 2 ) {
+purple_connection_error( session->con, _( "Invalid packet received from MXit." ) );
+free_rx_packet( &packet );
+packet.errcode = atoi( packet.records[1]->fields[0]->data );
+purple_debug_info( MXIT_PLUGIN_ID, "Packet received CMD:%i (%i)\n", packet.cmd, packet.errcode );
+if ( session->outack == packet.cmd ) {
+session->outack = 0;
+if ( packet.errcode != MXIT_ERRCODE_SUCCESS ) {
+if ( ( packet.records[1]->fcount > 1 ) && ( packet.records[1]->fields[1]->data ) )
+packet.errmsg = packet.records[1]->fields[1]->data;
+packet.errmsg = NULL;
+res = process_error_response( session, &packet );
+res = process_success_response( session, &packet );
+free_rx_packet( &packet );
+1
+---------------------------------
+472 _CVE-2016-2371.c PU 37 15
+int mxit_parse_packet( struct MXitSession* session )
+i = 0;
+while ( i < session->rx_i ) {
+memset( &packet, 0x00, sizeof( struct rx_packet ) );
+rec = add_record( &packet );
+pbreak = FALSE;
+while ( ( i < session->rx_i ) && ( !pbreak ) ) {
+switch ( session->rx_dbuf[i] ) {
+if ( packet.rcount == 1 ) {
+packet.cmd = atoi( packet.records[0]->fields[0]->data );
+else if ( packet.rcount == 2 ) {
+if ( packet.cmd == CP_CMD_MEDIA ) {
+rec = add_record( &packet );
+field = add_field( rec );
+field->data = &session->rx_dbuf[i + 1];
+field->len = session->rx_i - i;
+res = get_chunk_len( field->data );
+if ( res + 6 + i < session->rx_i ) {
+i += res + 6;
+pbreak = TRUE;
+i = session->rx_i;
+rec = add_record( &packet );
+pbreak = TRUE;
+i++;
+if ( packet.rcount < 2 ) {
+purple_connection_error( session->con, _( "Invalid packet received from MXit." ) );
+free_rx_packet( &packet );
+packet.errcode = atoi( packet.records[1]->fields[0]->data );
+purple_debug_info( MXIT_PLUGIN_ID, "Packet received CMD:%i (%i)\n", packet.cmd, packet.errcode );
+if ( session->outack == packet.cmd ) {
+session->outack = 0;
+if ( packet.errcode != MXIT_ERRCODE_SUCCESS ) {
+if ( ( packet.records[1]->fcount > 1 ) && ( packet.records[1]->fields[1]->data ) )
+packet.errmsg = packet.records[1]->fields[1]->data;
+packet.errmsg = NULL;
+res = process_error_response( session, &packet );
+res = process_success_response( session, &packet );
+free_rx_packet( &packet );
+1
+---------------------------------
+473 _CVE-2016-2371.c PU 39 16
+int mxit_parse_packet( struct MXitSession* session )
+i = 0;
+while ( i < session->rx_i ) {
+memset( &packet, 0x00, sizeof( struct rx_packet ) );
+rec = add_record( &packet );
+pbreak = FALSE;
+while ( ( i < session->rx_i ) && ( !pbreak ) ) {
+switch ( session->rx_dbuf[i] ) {
+if ( packet.rcount == 1 ) {
+packet.cmd = atoi( packet.records[0]->fields[0]->data );
+else if ( packet.rcount == 2 ) {
+if ( packet.cmd == CP_CMD_MEDIA ) {
+rec = add_record( &packet );
+field = add_field( rec );
+field->data = &session->rx_dbuf[i + 1];
+field->len = session->rx_i - i;
+res = get_chunk_len( field->data );
+if ( res + 6 + i < session->rx_i ) {
+i += res + 6;
+pbreak = TRUE;
+i = session->rx_i;
+rec = add_record( &packet );
+pbreak = TRUE;
+i++;
+if ( packet.rcount < 2 ) {
+purple_connection_error( session->con, _( "Invalid packet received from MXit." ) );
+free_rx_packet( &packet );
+packet.errcode = atoi( packet.records[1]->fields[0]->data );
+purple_debug_info( MXIT_PLUGIN_ID, "Packet received CMD:%i (%i)\n", packet.cmd, packet.errcode );
+if ( session->outack == packet.cmd ) {
+session->outack = 0;
+if ( packet.errcode != MXIT_ERRCODE_SUCCESS ) {
+if ( ( packet.records[1]->fcount > 1 ) && ( packet.records[1]->fields[1]->data ) )
+packet.errmsg = packet.records[1]->fields[1]->data;
+packet.errmsg = NULL;
+res = process_error_response( session, &packet );
+res = process_success_response( session, &packet );
+free_rx_packet( &packet );
+1
+---------------------------------
+474 _CVE-2016-2371.c PU 41 17
+int mxit_parse_packet( struct MXitSession* session )
+i = 0;
+while ( i < session->rx_i ) {
+memset( &packet, 0x00, sizeof( struct rx_packet ) );
+rec = add_record( &packet );
+pbreak = FALSE;
+while ( ( i < session->rx_i ) && ( !pbreak ) ) {
+switch ( session->rx_dbuf[i] ) {
+if ( packet.rcount == 1 ) {
+packet.cmd = atoi( packet.records[0]->fields[0]->data );
+else if ( packet.rcount == 2 ) {
+if ( packet.cmd == CP_CMD_MEDIA ) {
+rec = add_record( &packet );
+field = add_field( rec );
+field->data = &session->rx_dbuf[i + 1];
+field->len = session->rx_i - i;
+res = get_chunk_len( field->data );
+if ( res + 6 + i < session->rx_i ) {
+i += res + 6;
+pbreak = TRUE;
+i = session->rx_i;
+rec = add_record( &packet );
+pbreak = TRUE;
+i++;
+if ( packet.rcount < 2 ) {
+purple_connection_error( session->con, _( "Invalid packet received from MXit." ) );
+free_rx_packet( &packet );
+packet.errcode = atoi( packet.records[1]->fields[0]->data );
+purple_debug_info( MXIT_PLUGIN_ID, "Packet received CMD:%i (%i)\n", packet.cmd, packet.errcode );
+if ( session->outack == packet.cmd ) {
+session->outack = 0;
+if ( packet.errcode != MXIT_ERRCODE_SUCCESS ) {
+if ( ( packet.records[1]->fcount > 1 ) && ( packet.records[1]->fields[1]->data ) )
+packet.errmsg = packet.records[1]->fields[1]->data;
+packet.errmsg = NULL;
+res = process_error_response( session, &packet );
+res = process_success_response( session, &packet );
+free_rx_packet( &packet );
+1
+---------------------------------
+475 _CVE-2016-2371.c AE 43 18
+int mxit_parse_packet( struct MXitSession* session )
+i = 0;
+while ( i < session->rx_i ) {
+memset( &packet, 0x00, sizeof( struct rx_packet ) );
+rec = add_record( &packet );
+pbreak = FALSE;
+while ( ( i < session->rx_i ) && ( !pbreak ) ) {
+switch ( session->rx_dbuf[i] ) {
+if ( packet.rcount == 1 ) {
+packet.cmd = atoi( packet.records[0]->fields[0]->data );
+else if ( packet.rcount == 2 ) {
+if ( packet.cmd == CP_CMD_MEDIA ) {
+rec = add_record( &packet );
+field = add_field( rec );
+field->data = &session->rx_dbuf[i + 1];
+field->len = session->rx_i - i;
+res = get_chunk_len( field->data );
+if ( res + 6 + i < session->rx_i ) {
+i += res + 6;
+pbreak = TRUE;
+i = session->rx_i;
+rec = add_record( &packet );
+pbreak = TRUE;
+i++;
+if ( packet.rcount < 2 ) {
+purple_connection_error( session->con, _( "Invalid packet received from MXit." ) );
+free_rx_packet( &packet );
+packet.errcode = atoi( packet.records[1]->fields[0]->data );
+purple_debug_info( MXIT_PLUGIN_ID, "Packet received CMD:%i (%i)\n", packet.cmd, packet.errcode );
+if ( session->outack == packet.cmd ) {
+session->outack = 0;
+if ( packet.errcode != MXIT_ERRCODE_SUCCESS ) {
+if ( ( packet.records[1]->fcount > 1 ) && ( packet.records[1]->fields[1]->data ) )
+packet.errmsg = packet.records[1]->fields[1]->data;
+packet.errmsg = NULL;
+res = process_error_response( session, &packet );
+res = process_success_response( session, &packet );
+free_rx_packet( &packet );
+1
+---------------------------------
+476 _CVE-2016-2371.c PU 47 20
+int mxit_parse_packet( struct MXitSession* session )
+i = 0;
+while ( i < session->rx_i ) {
+memset( &packet, 0x00, sizeof( struct rx_packet ) );
+rec = add_record( &packet );
+pbreak = FALSE;
+while ( ( i < session->rx_i ) && ( !pbreak ) ) {
+switch ( session->rx_dbuf[i] ) {
+if ( packet.rcount == 1 ) {
+packet.cmd = atoi( packet.records[0]->fields[0]->data );
+else if ( packet.rcount == 2 ) {
+if ( packet.cmd == CP_CMD_MEDIA ) {
+rec = add_record( &packet );
+field = add_field( rec );
+field->data = &session->rx_dbuf[i + 1];
+field->len = session->rx_i - i;
+res = get_chunk_len( field->data );
+if ( res + 6 + i < session->rx_i ) {
+i += res + 6;
+pbreak = TRUE;
+i = session->rx_i;
+rec = add_record( &packet );
+pbreak = TRUE;
+i++;
+if ( packet.rcount < 2 ) {
+purple_connection_error( session->con, _( "Invalid packet received from MXit." ) );
+free_rx_packet( &packet );
+packet.errcode = atoi( packet.records[1]->fields[0]->data );
+purple_debug_info( MXIT_PLUGIN_ID, "Packet received CMD:%i (%i)\n", packet.cmd, packet.errcode );
+if ( session->outack == packet.cmd ) {
+session->outack = 0;
+if ( packet.errcode != MXIT_ERRCODE_SUCCESS ) {
+if ( ( packet.records[1]->fcount > 1 ) && ( packet.records[1]->fields[1]->data ) )
+packet.errmsg = packet.records[1]->fields[1]->data;
+packet.errmsg = NULL;
+res = process_error_response( session, &packet );
+res = process_success_response( session, &packet );
+free_rx_packet( &packet );
+1
+---------------------------------
+477 _CVE-2016-2371.c AU 53 23
+int mxit_parse_packet( struct MXitSession* session )
+i = 0;
+while ( i < session->rx_i ) {
+field = NULL;
+memset( &packet, 0x00, sizeof( struct rx_packet ) );
+rec = add_record( &packet );
+pbreak = FALSE;
+while ( ( i < session->rx_i ) && ( !pbreak ) ) {
+switch ( session->rx_dbuf[i] ) {
+if ( packet.rcount == 1 ) {
+packet.cmd = atoi( packet.records[0]->fields[0]->data );
+else if ( packet.rcount == 2 ) {
+if ( packet.cmd == CP_CMD_MEDIA ) {
+rec = add_record( &packet );
+field = add_field( rec );
+field->data = &session->rx_dbuf[i + 1];
+field->len = session->rx_i - i;
+res = get_chunk_len( field->data );
+if ( res + 6 + i < session->rx_i ) {
+i += res + 6;
+pbreak = TRUE;
+i = session->rx_i;
+else if ( !field ) {
+field->data = &session->rx_dbuf[i];
+session->rx_dbuf[i] = '\0';
+rec = add_record( &packet );
+field = NULL;
+session->rx_dbuf[i] = '\0';
+if ( !field ) {
+field = add_field( rec );
+field->data = &session->rx_dbuf[i];
+field = NULL;
+session->rx_dbuf[i] = '\0';
+pbreak = TRUE;
+if ( !field ) {
+field = add_field( rec );
+field->data = &session->rx_dbuf[i];
+field->len++;
+i++;
+if ( packet.rcount < 2 ) {
+purple_connection_error( session->con, _( "Invalid packet received from MXit." ) );
+free_rx_packet( &packet );
+packet.errcode = atoi( packet.records[1]->fields[0]->data );
+purple_debug_info( MXIT_PLUGIN_ID, "Packet received CMD:%i (%i)\n", packet.cmd, packet.errcode );
+if ( session->outack == packet.cmd ) {
+session->outack = 0;
+if ( packet.errcode != MXIT_ERRCODE_SUCCESS ) {
+if ( ( packet.records[1]->fcount > 1 ) && ( packet.records[1]->fields[1]->data ) )
+packet.errmsg = packet.records[1]->fields[1]->data;
+packet.errmsg = NULL;
+res = process_error_response( session, &packet );
+res = process_success_response( session, &packet );
+free_rx_packet( &packet );
+1
+---------------------------------
+478 _CVE-2016-2371.c AU 55 21
+int mxit_parse_packet( struct MXitSession* session )
+i = 0;
+while ( i < session->rx_i ) {
+memset( &packet, 0x00, sizeof( struct rx_packet ) );
+rec = add_record( &packet );
+pbreak = FALSE;
+while ( ( i < session->rx_i ) && ( !pbreak ) ) {
+switch ( session->rx_dbuf[i] ) {
+if ( packet.rcount == 1 ) {
+packet.cmd = atoi( packet.records[0]->fields[0]->data );
+else if ( packet.rcount == 2 ) {
+if ( packet.cmd == CP_CMD_MEDIA ) {
+rec = add_record( &packet );
+field = add_field( rec );
+field->data = &session->rx_dbuf[i + 1];
+field->len = session->rx_i - i;
+res = get_chunk_len( field->data );
+if ( res + 6 + i < session->rx_i ) {
+i += res + 6;
+pbreak = TRUE;
+i = session->rx_i;
+session->rx_dbuf[i] = '\0';
+rec = add_record( &packet );
+pbreak = TRUE;
+i++;
+if ( packet.rcount < 2 ) {
+purple_connection_error( session->con, _( "Invalid packet received from MXit." ) );
+free_rx_packet( &packet );
+packet.errcode = atoi( packet.records[1]->fields[0]->data );
+purple_debug_info( MXIT_PLUGIN_ID, "Packet received CMD:%i (%i)\n", packet.cmd, packet.errcode );
+if ( session->outack == packet.cmd ) {
+session->outack = 0;
+if ( packet.errcode != MXIT_ERRCODE_SUCCESS ) {
+if ( ( packet.records[1]->fcount > 1 ) && ( packet.records[1]->fields[1]->data ) )
+packet.errmsg = packet.records[1]->fields[1]->data;
+packet.errmsg = NULL;
+res = process_error_response( session, &packet );
+res = process_success_response( session, &packet );
+free_rx_packet( &packet );
+1
+---------------------------------
+479 _CVE-2016-2371.c PU 56 21
+int mxit_parse_packet( struct MXitSession* session )
+i = 0;
+while ( i < session->rx_i ) {
+memset( &packet, 0x00, sizeof( struct rx_packet ) );
+rec = add_record( &packet );
+pbreak = FALSE;
+while ( ( i < session->rx_i ) && ( !pbreak ) ) {
+switch ( session->rx_dbuf[i] ) {
+if ( packet.rcount == 1 ) {
+packet.cmd = atoi( packet.records[0]->fields[0]->data );
+else if ( packet.rcount == 2 ) {
+if ( packet.cmd == CP_CMD_MEDIA ) {
+rec = add_record( &packet );
+field = add_field( rec );
+field->data = &session->rx_dbuf[i + 1];
+field->len = session->rx_i - i;
+res = get_chunk_len( field->data );
+if ( res + 6 + i < session->rx_i ) {
+i += res + 6;
+pbreak = TRUE;
+i = session->rx_i;
+rec = add_record( &packet );
+pbreak = TRUE;
+i++;
+if ( packet.rcount < 2 ) {
+purple_connection_error( session->con, _( "Invalid packet received from MXit." ) );
+free_rx_packet( &packet );
+packet.errcode = atoi( packet.records[1]->fields[0]->data );
+purple_debug_info( MXIT_PLUGIN_ID, "Packet received CMD:%i (%i)\n", packet.cmd, packet.errcode );
+if ( session->outack == packet.cmd ) {
+session->outack = 0;
+if ( packet.errcode != MXIT_ERRCODE_SUCCESS ) {
+if ( ( packet.records[1]->fcount > 1 ) && ( packet.records[1]->fields[1]->data ) )
+packet.errmsg = packet.records[1]->fields[1]->data;
+packet.errmsg = NULL;
+res = process_error_response( session, &packet );
+res = process_success_response( session, &packet );
+free_rx_packet( &packet );
+1
+---------------------------------
+480 _CVE-2016-2371.c AU 61 22
+int mxit_parse_packet( struct MXitSession* session )
+i = 0;
+while ( i < session->rx_i ) {
+memset( &packet, 0x00, sizeof( struct rx_packet ) );
+rec = add_record( &packet );
+pbreak = FALSE;
+while ( ( i < session->rx_i ) && ( !pbreak ) ) {
+switch ( session->rx_dbuf[i] ) {
+if ( packet.rcount == 1 ) {
+packet.cmd = atoi( packet.records[0]->fields[0]->data );
+else if ( packet.rcount == 2 ) {
+if ( packet.cmd == CP_CMD_MEDIA ) {
+rec = add_record( &packet );
+field = add_field( rec );
+field->data = &session->rx_dbuf[i + 1];
+field->len = session->rx_i - i;
+res = get_chunk_len( field->data );
+if ( res + 6 + i < session->rx_i ) {
+i += res + 6;
+pbreak = TRUE;
+i = session->rx_i;
+rec = add_record( &packet );
+session->rx_dbuf[i] = '\0';
+pbreak = TRUE;
+i++;
+if ( packet.rcount < 2 ) {
+purple_connection_error( session->con, _( "Invalid packet received from MXit." ) );
+free_rx_packet( &packet );
+packet.errcode = atoi( packet.records[1]->fields[0]->data );
+purple_debug_info( MXIT_PLUGIN_ID, "Packet received CMD:%i (%i)\n", packet.cmd, packet.errcode );
+if ( session->outack == packet.cmd ) {
+session->outack = 0;
+if ( packet.errcode != MXIT_ERRCODE_SUCCESS ) {
+if ( ( packet.records[1]->fcount > 1 ) && ( packet.records[1]->fields[1]->data ) )
+packet.errmsg = packet.records[1]->fields[1]->data;
+packet.errmsg = NULL;
+res = process_error_response( session, &packet );
+res = process_success_response( session, &packet );
+free_rx_packet( &packet );
+1
+---------------------------------
+481 _CVE-2016-2371.c AU 64 30
+int mxit_parse_packet( struct MXitSession* session )
+i = 0;
+while ( i < session->rx_i ) {
+field = NULL;
+memset( &packet, 0x00, sizeof( struct rx_packet ) );
+rec = add_record( &packet );
+pbreak = FALSE;
+while ( ( i < session->rx_i ) && ( !pbreak ) ) {
+switch ( session->rx_dbuf[i] ) {
+if ( packet.rcount == 1 ) {
+packet.cmd = atoi( packet.records[0]->fields[0]->data );
+else if ( packet.rcount == 2 ) {
+if ( packet.cmd == CP_CMD_MEDIA ) {
+rec = add_record( &packet );
+field = add_field( rec );
+field->data = &session->rx_dbuf[i + 1];
+field->len = session->rx_i - i;
+res = get_chunk_len( field->data );
+if ( res + 6 + i < session->rx_i ) {
+i += res + 6;
+pbreak = TRUE;
+i = session->rx_i;
+else if ( !field ) {
+field->data = &session->rx_dbuf[i];
+session->rx_dbuf[i] = '\0';
+rec = add_record( &packet );
+field = NULL;
+session->rx_dbuf[i] = '\0';
+if ( !field ) {
+field = add_field( rec );
+field->data = &session->rx_dbuf[i];
+field = NULL;
+session->rx_dbuf[i] = '\0';
+pbreak = TRUE;
+if ( !field ) {
+field = add_field( rec );
+field->data = &session->rx_dbuf[i];
+field->len++;
+i++;
+if ( packet.rcount < 2 ) {
+purple_connection_error( session->con, _( "Invalid packet received from MXit." ) );
+free_rx_packet( &packet );
+packet.errcode = atoi( packet.records[1]->fields[0]->data );
+purple_debug_info( MXIT_PLUGIN_ID, "Packet received CMD:%i (%i)\n", packet.cmd, packet.errcode );
+if ( session->outack == packet.cmd ) {
+session->outack = 0;
+if ( packet.errcode != MXIT_ERRCODE_SUCCESS ) {
+if ( ( packet.records[1]->fcount > 1 ) && ( packet.records[1]->fields[1]->data ) )
+packet.errmsg = packet.records[1]->fields[1]->data;
+packet.errmsg = NULL;
+res = process_error_response( session, &packet );
+res = process_success_response( session, &packet );
+free_rx_packet( &packet );
+1
+---------------------------------
+482 _CVE-2016-2371.c PU 79 23
+int mxit_parse_packet( struct MXitSession* session )
+i = 0;
+while ( i < session->rx_i ) {
+memset( &packet, 0x00, sizeof( struct rx_packet ) );
+rec = add_record( &packet );
+pbreak = FALSE;
+while ( ( i < session->rx_i ) && ( !pbreak ) ) {
+switch ( session->rx_dbuf[i] ) {
+if ( packet.rcount == 1 ) {
+packet.cmd = atoi( packet.records[0]->fields[0]->data );
+else if ( packet.rcount == 2 ) {
+if ( packet.cmd == CP_CMD_MEDIA ) {
+rec = add_record( &packet );
+field = add_field( rec );
+field->data = &session->rx_dbuf[i + 1];
+field->len = session->rx_i - i;
+res = get_chunk_len( field->data );
+if ( res + 6 + i < session->rx_i ) {
+i += res + 6;
+pbreak = TRUE;
+i = session->rx_i;
+rec = add_record( &packet );
+pbreak = TRUE;
+field->len++;
+i++;
+if ( packet.rcount < 2 ) {
+purple_connection_error( session->con, _( "Invalid packet received from MXit." ) );
+free_rx_packet( &packet );
+packet.errcode = atoi( packet.records[1]->fields[0]->data );
+purple_debug_info( MXIT_PLUGIN_ID, "Packet received CMD:%i (%i)\n", packet.cmd, packet.errcode );
+if ( session->outack == packet.cmd ) {
+session->outack = 0;
+if ( packet.errcode != MXIT_ERRCODE_SUCCESS ) {
+if ( ( packet.records[1]->fcount > 1 ) && ( packet.records[1]->fields[1]->data ) )
+packet.errmsg = packet.records[1]->fields[1]->data;
+packet.errmsg = NULL;
+res = process_error_response( session, &packet );
+res = process_success_response( session, &packet );
+free_rx_packet( &packet );
+1
+---------------------------------
+483 _CVE-2016-2371.c AE 82 40
+int mxit_parse_packet( struct MXitSession* session )
+i = 0;
+while ( i < session->rx_i ) {
+rec = NULL;
+field = NULL;
+memset( &packet, 0x00, sizeof( struct rx_packet ) );
+rec = add_record( &packet );
+pbreak = FALSE;
+while ( ( i < session->rx_i ) && ( !pbreak ) ) {
+switch ( session->rx_dbuf[i] ) {
+if ( packet.rcount == 1 ) {
+packet.cmd = atoi( packet.records[0]->fields[0]->data );
+else if ( packet.rcount == 2 ) {
+if ( packet.cmd == CP_CMD_MEDIA ) {
+rec = add_record( &packet );
+field = add_field( rec );
+field->data = &session->rx_dbuf[i + 1];
+field->len = session->rx_i - i;
+res = get_chunk_len( field->data );
+if ( res + 6 + i < session->rx_i ) {
+i += res + 6;
+pbreak = TRUE;
+i = session->rx_i;
+else if ( !field ) {
+field = add_field( rec );
+field->data = &session->rx_dbuf[i];
+session->rx_dbuf[i] = '\0';
+rec = add_record( &packet );
+field = NULL;
+session->rx_dbuf[i] = '\0';
+if ( !field ) {
+field = add_field( rec );
+field->data = &session->rx_dbuf[i];
+field = NULL;
+session->rx_dbuf[i] = '\0';
+pbreak = TRUE;
+if ( !field ) {
+field = add_field( rec );
+field->data = &session->rx_dbuf[i];
+field->len++;
+i++;
+if ( packet.rcount < 2 ) {
+purple_connection_error( session->con, _( "Invalid packet received from MXit." ) );
+free_rx_packet( &packet );
+session->rx_dbuf[session->rx_i] = '\0';
+packet.errcode = atoi( packet.records[1]->fields[0]->data );
+purple_debug_info( MXIT_PLUGIN_ID, "Packet received CMD:%i (%i)\n", packet.cmd, packet.errcode );
+if ( session->outack == packet.cmd ) {
+session->outack = 0;
+if ( packet.errcode != MXIT_ERRCODE_SUCCESS ) {
+if ( ( packet.records[1]->fcount > 1 ) && ( packet.records[1]->fields[1]->data ) )
+packet.errmsg = packet.records[1]->fields[1]->data;
+packet.errmsg = NULL;
+res = process_error_response( session, &packet );
+res = process_success_response( session, &packet );
+free_rx_packet( &packet );
+if ( session->outack == 0 )
+mxit_manage_queue( session );
+return res;
+1
+---------------------------------
+484 _CVE-2016-2371.c PU 86 25
+int mxit_parse_packet( struct MXitSession* session )
+i = 0;
+while ( i < session->rx_i ) {
+memset( &packet, 0x00, sizeof( struct rx_packet ) );
+rec = add_record( &packet );
+pbreak = FALSE;
+while ( ( i < session->rx_i ) && ( !pbreak ) ) {
+switch ( session->rx_dbuf[i] ) {
+if ( packet.rcount == 1 ) {
+packet.cmd = atoi( packet.records[0]->fields[0]->data );
+else if ( packet.rcount == 2 ) {
+if ( packet.cmd == CP_CMD_MEDIA ) {
+rec = add_record( &packet );
+field = add_field( rec );
+field->data = &session->rx_dbuf[i + 1];
+field->len = session->rx_i - i;
+res = get_chunk_len( field->data );
+if ( res + 6 + i < session->rx_i ) {
+i += res + 6;
+pbreak = TRUE;
+i = session->rx_i;
+rec = add_record( &packet );
+pbreak = TRUE;
+i++;
+if ( packet.rcount < 2 ) {
+purple_connection_error( session->con, _( "Invalid packet received from MXit." ) );
+free_rx_packet( &packet );
+packet.errcode = atoi( packet.records[1]->fields[0]->data );
+purple_debug_info( MXIT_PLUGIN_ID, "Packet received CMD:%i (%i)\n", packet.cmd, packet.errcode );
+if ( session->outack == packet.cmd ) {
+session->outack = 0;
+if ( packet.errcode != MXIT_ERRCODE_SUCCESS ) {
+if ( ( packet.records[1]->fcount > 1 ) && ( packet.records[1]->fields[1]->data ) )
+packet.errmsg = packet.records[1]->fields[1]->data;
+packet.errmsg = NULL;
+res = process_error_response( session, &packet );
+res = process_success_response( session, &packet );
+free_rx_packet( &packet );
+1
+---------------------------------
+485 _CVE-2016-2371.c PU 87 26
+int mxit_parse_packet( struct MXitSession* session )
+i = 0;
+while ( i < session->rx_i ) {
+memset( &packet, 0x00, sizeof( struct rx_packet ) );
+rec = add_record( &packet );
+pbreak = FALSE;
+while ( ( i < session->rx_i ) && ( !pbreak ) ) {
+switch ( session->rx_dbuf[i] ) {
+if ( packet.rcount == 1 ) {
+packet.cmd = atoi( packet.records[0]->fields[0]->data );
+else if ( packet.rcount == 2 ) {
+if ( packet.cmd == CP_CMD_MEDIA ) {
+rec = add_record( &packet );
+field = add_field( rec );
+field->data = &session->rx_dbuf[i + 1];
+field->len = session->rx_i - i;
+res = get_chunk_len( field->data );
+if ( res + 6 + i < session->rx_i ) {
+i += res + 6;
+pbreak = TRUE;
+i = session->rx_i;
+rec = add_record( &packet );
+pbreak = TRUE;
+i++;
+if ( packet.rcount < 2 ) {
+purple_connection_error( session->con, _( "Invalid packet received from MXit." ) );
+free_rx_packet( &packet );
+packet.errcode = atoi( packet.records[1]->fields[0]->data );
+purple_debug_info( MXIT_PLUGIN_ID, "Packet received CMD:%i (%i)\n", packet.cmd, packet.errcode );
+if ( session->outack == packet.cmd ) {
+session->outack = 0;
+if ( packet.errcode != MXIT_ERRCODE_SUCCESS ) {
+if ( ( packet.records[1]->fcount > 1 ) && ( packet.records[1]->fields[1]->data ) )
+packet.errmsg = packet.records[1]->fields[1]->data;
+packet.errmsg = NULL;
+res = process_error_response( session, &packet );
+res = process_success_response( session, &packet );
+free_rx_packet( &packet );
+1
+---------------------------------
+486 _CVE-2016-2371.c AU 90 27
+int mxit_parse_packet( struct MXitSession* session )
+i = 0;
+while ( i < session->rx_i ) {
+memset( &packet, 0x00, sizeof( struct rx_packet ) );
+rec = add_record( &packet );
+pbreak = FALSE;
+while ( ( i < session->rx_i ) && ( !pbreak ) ) {
+switch ( session->rx_dbuf[i] ) {
+if ( packet.rcount == 1 ) {
+packet.cmd = atoi( packet.records[0]->fields[0]->data );
+else if ( packet.rcount == 2 ) {
+if ( packet.cmd == CP_CMD_MEDIA ) {
+rec = add_record( &packet );
+field = add_field( rec );
+field->data = &session->rx_dbuf[i + 1];
+field->len = session->rx_i - i;
+res = get_chunk_len( field->data );
+if ( res + 6 + i < session->rx_i ) {
+i += res + 6;
+pbreak = TRUE;
+i = session->rx_i;
+rec = add_record( &packet );
+pbreak = TRUE;
+i++;
+if ( packet.rcount < 2 ) {
+purple_connection_error( session->con, _( "Invalid packet received from MXit." ) );
+free_rx_packet( &packet );
+session->rx_dbuf[session->rx_i] = '\0';
+packet.errcode = atoi( packet.records[1]->fields[0]->data );
+purple_debug_info( MXIT_PLUGIN_ID, "Packet received CMD:%i (%i)\n", packet.cmd, packet.errcode );
+if ( session->outack == packet.cmd ) {
+session->outack = 0;
+if ( packet.errcode != MXIT_ERRCODE_SUCCESS ) {
+if ( ( packet.records[1]->fcount > 1 ) && ( packet.records[1]->fields[1]->data ) )
+packet.errmsg = packet.records[1]->fields[1]->data;
+packet.errmsg = NULL;
+res = process_error_response( session, &packet );
+res = process_success_response( session, &packet );
+free_rx_packet( &packet );
+1
+---------------------------------
+487 _CVE-2016-2371.c PU 98 29
+int mxit_parse_packet( struct MXitSession* session )
+i = 0;
+while ( i < session->rx_i ) {
+memset( &packet, 0x00, sizeof( struct rx_packet ) );
+rec = add_record( &packet );
+pbreak = FALSE;
+while ( ( i < session->rx_i ) && ( !pbreak ) ) {
+switch ( session->rx_dbuf[i] ) {
+if ( packet.rcount == 1 ) {
+packet.cmd = atoi( packet.records[0]->fields[0]->data );
+else if ( packet.rcount == 2 ) {
+if ( packet.cmd == CP_CMD_MEDIA ) {
+rec = add_record( &packet );
+field = add_field( rec );
+field->data = &session->rx_dbuf[i + 1];
+field->len = session->rx_i - i;
+res = get_chunk_len( field->data );
+if ( res + 6 + i < session->rx_i ) {
+i += res + 6;
+pbreak = TRUE;
+i = session->rx_i;
+rec = add_record( &packet );
+pbreak = TRUE;
+i++;
+if ( packet.rcount < 2 ) {
+purple_connection_error( session->con, _( "Invalid packet received from MXit." ) );
+free_rx_packet( &packet );
+packet.errcode = atoi( packet.records[1]->fields[0]->data );
+purple_debug_info( MXIT_PLUGIN_ID, "Packet received CMD:%i (%i)\n", packet.cmd, packet.errcode );
+if ( session->outack == packet.cmd ) {
+session->outack = 0;
+if ( packet.errcode != MXIT_ERRCODE_SUCCESS ) {
+if ( ( packet.records[1]->fcount > 1 ) && ( packet.records[1]->fields[1]->data ) )
+packet.errmsg = packet.records[1]->fields[1]->data;
+packet.errmsg = NULL;
+res = process_error_response( session, &packet );
+res = process_success_response( session, &packet );
+free_rx_packet( &packet );
+1
+---------------------------------
